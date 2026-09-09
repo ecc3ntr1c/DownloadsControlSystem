@@ -113,11 +113,26 @@ class SoftwareRequest(models.Model):
         verbose_name = "Заявка на ПО"
         verbose_name_plural = "Заявки на ПО"
         ordering = ["-created_at"]
+        permissions = [
+            (
+                "view_security_requests",
+                "Can view requests as security officer",
+            ),
+            (
+                "approve_software_request",
+                "Can approve software request",
+            ),
+            (
+                "reject_software_request",
+                "Can reject software request",
+            ),
+        ]
         constraints = [
             models.UniqueConstraint(
                 fields=["external_system", "external_request_id"],
                 name="unique_external_request",
-                condition=~models.Q(external_system="") & ~models.Q(external_request_id=""),
+                condition=~models.Q(external_system="")
+                          & ~models.Q(external_request_id=""),
             )
         ]
 
