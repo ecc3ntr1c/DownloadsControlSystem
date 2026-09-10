@@ -83,3 +83,17 @@ class SoftwareRequestDetailSerializer(serializers.ModelSerializer):
             "closed_at",
         )
         read_only_fields = fields
+
+
+class SecurityRequestApproveSerializer(serializers.Serializer):
+    security_comment = serializers.CharField(
+        required=False,
+        allow_blank=True,
+    )
+
+
+class SecurityRequestRejectSerializer(serializers.Serializer):
+    security_comment = serializers.CharField(
+        required=True,
+        allow_blank=False,
+    )
