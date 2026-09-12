@@ -3,6 +3,142 @@ from django.db import models
 from requests_app.models import SoftwareRequest
 
 
+class DownloadsPolicy(models.Model):
+    """
+    Политика доступных для скачивания ресурсов.
+
+    Настраивается администратором:
+
+    """
+
+    name = models.CharField(
+        max_length=128,
+        default="Default download policy",
+        verbose_name="Название политики скачивания",
+    )
+
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name="Активна",
+    )
+
+    allow_http = models.BooleanField(
+        default=True,
+        verbose_name="Разрешить HTTP",
+    )
+
+    allow_https = models.BooleanField(
+        default=True,
+        verbose_name="Разрешить HTTPS",
+    )
+
+    allow_file_scheme = models.BooleanField(
+        default=False,
+        verbose_name="Разрешить file://",
+    )
+
+    allow_url_credentials = models.BooleanField(
+        default=False,
+        verbose_name="Разрешить username/password в URL",
+    )
+
+    reject_auth_required = models.BooleanField(
+        default=True,
+        verbose_name="Отклонять источники, требующие авторизацию",
+    )
+
+    reject_html_pages = models.BooleanField(
+        default=True,
+        verbose_name="Отклонять HTML-страницы вместо файлов",
+    )
+
+    allow_private_networks = models.BooleanField(
+        default=False,
+        verbose_name="Разрешить private/internal IP",
+    )
+
+    max_file_size_mb = models.PositiveIntegerField(
+        default=500,
+        verbose_name="Максимальный размер файла, МБ",
+    )
+
+    max_redirects = models.PositiveIntegerField(
+        default=5,
+        verbose_name="Максимальное количество redirect",
+    )
+
+    allowed_domains = models.JSONField(
+        default=list,
+        blank=True,
+        verbose_name="Разрешённые домены",
+        help_text="Пустой список означает: разрешены любые домены.",
+    )
+
+    blocked_domains = models.JSONField(
+        default=list,
+        blank=True,
+        verbose_name="Запрещённые домены",
+    )
+
+    allowed_ports = models.JSONField(
+        default=list,
+        blank=True,
+        verbose_name="Разрешённые порты",
+        help_text="Пустой список означает: разрешены любые порты.",
+    )
+
+    blocked_ports = models.JSONField(
+        default=list,
+        blank=True,
+        verbose_name="Запрещённые порты",
+    )
+
+    allowed_file_hosts = models.JSONField(
+        default=list,
+        blank=True,
+        verbose_name="Разрешённые file:// hosts",
+        help_text="Например: fs-02. Пустой список означает: любые hosts.",
+    )
+
+    blocked_file_hosts = models.JSONField(
+        default=list,
+        blank=True,
+        verbose_name="Запрещённые file:// hosts",
+        help_text="Например: fs-01.",
+    )
+
+    allowed_file_base_paths = models.JSONField(
+        default=list,
+        blank=True,
+        verbose_name="Разрешённые базовые пути для file://",
+        help_text="Например: /mnt/software_repo. Пустой список означает: любые пути.",
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата создания",
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Дата обновления",
+    )
+
+    class Meta:
+        verbose_name = "Политика скачивания"
+        verbose_name_plural = "Политики скачивания"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["is_active"],
+                condition=models.Q(is_active=True),
+                name="unique_active_download_policy",
+            )
+        ]
+
+    def __str__(self):
+        return self.name
+
+
 class FileSource(models.Model):
     """
     Источник файла: обычная HTTP-ссылка, Яндекс.Диск,

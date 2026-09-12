@@ -10,6 +10,10 @@ class SoftwareRequest(models.Model):
     class RequestStatus(models.TextChoices):
         CREATED = "CREATED", "Создана"
         UNDER_SECURITY_REVIEW = "UNDER_SECURITY_REVIEW", "На рассмотрении ИБ"
+        PROHIBITED_SOFTWARE_REVIEW = (
+            "PROHIBITED_SOFTWARE_REVIEW",
+            "В списке запрещённого ПО",
+        )
         WAITING_SECURITY_DECISION = "WAITING_SECURITY_DECISION", "Ожидает решения ИБ"
         APPROVED = "APPROVED", "Согласована ИБ"
         REJECTED = "REJECTED", "Отказана ИБ"
