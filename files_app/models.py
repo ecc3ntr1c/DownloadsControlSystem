@@ -405,3 +405,223 @@ class FileTypePolicy(models.Model):
 
     def __str__(self):
         return f"{self.extension} / {self.mime_type or 'любой MIME'}"
+
+
+class ProtectedDownloadRule(models.Model):
+    """
+    Защитное правило скачивания.
+
+    Эти правила должны управляться только суперадмином.
+    Они нужны для опасных комбинаций, например:
+    username/password + внутренний домен = запретить.
+    """
+
+    class CredentialsMode(models.TextChoices):
+        ANY = "ANY", "Неважно"
+        REQUIRED = "REQUIRED", "Только если credentials есть"
+        FORBIDDEN = "FORBIDDEN", "Только если credentials нет"
+
+    name = models.CharField(
+        max_length=128,
+        verbose_name="Название правила",
+    )
+
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name="Активно",
+    )
+
+    scheme = models.CharField(
+        max_length=32,
+        blank=True,
+        verbose_name="Схема URL",
+        help_text="Например: http, https, file. Пусто = любая схема.",
+    )
+
+    host_pattern = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name="Шаблон host/domain",
+        help_text="Например: fs-01 или .company.local. Пусто = любой host.",
+    )
+
+    credentials_mode = models.CharField(
+        max_length=32,
+        choices=CredentialsMode.choices,
+        default=CredentialsMode.ANY,
+        verbose_name="Наличие username/password",
+    )
+
+    reason = models.TextField(
+        verbose_name="Причина запрета",
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата создания",
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Дата обновления",
+    )
+
+    class Meta:
+        verbose_name = "Защитное правило скачивания"
+        verbose_name_plural = "Защитные правила скачивания"
+
+    def __str__(self):
+        return self.name
+
+
+class ProhibitedSoftwareRule(models.Model):
+    """
+    Правило реестра запрещённого ПО.
+
+    Например:
+    - Adobe Acrobat crack;
+    - keygen;
+    - pirated;
+    - запрещённый домен;
+    - запрещённый продукт.
+    """
+
+    class MatchType(models.TextChoices):
+        CONTAINS = "CONTAINS", "Содержит текст"
+        EXACT = "EXACT", "Точное совпадение"
+        REGEX = "REGEX", "Регулярное выражение"
+        DOMAIN = "DOMAIN", "Домен"
+        URL_CONTAINS = "URL_CONTAINS", "URL содержит текст"
+
+    class TargetField(models.TextChoices):
+        ANY = "ANY", "Любое поле"
+        URL = "URL", "URL"
+        DESCRIPTION = "DESCRIPTION", "Описание"
+        BUSINESS_REASON = "BUSINESS_REASON", "Обоснование"
+        DOMAIN = "DOMAIN", "Домен"
+
+    name = models.CharField(
+        max_length=255,
+        verbose_name="Название правила",
+    )
+
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name="Активно",
+    )
+
+    match_type = models.CharField(
+        max_length=32,
+        choices=MatchType.choices,
+        verbose_name="Тип совпадения",
+    )
+
+    target_field = models.CharField(
+        max_length=32,
+        choices=TargetField.choices,
+        default=TargetField.ANY,
+        verbose_name="Где искать",
+    )
+
+    pattern = models.CharField(
+        max_length=1024,
+        verbose_name="Шаблон",
+    )
+
+    reason = models.TextField(
+        verbose_name="Причина запрета",
+    )
+
+    requires_security_confirmation = models.BooleanField(
+        default=True,
+        verbose_name="Требует подтверждения ИБ",
+    )
+
+    allow_security_override = models.BooleanField(
+        default=True,
+        verbose_name="Разрешить ИБ игнорировать правило",
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата создания",
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Дата обновления",
+    )
+
+    class Meta:
+        verbose_name = "Правило запрещённого ПО"
+        verbose_name_plural = "Реестр запрещённого ПО"
+
+    def __str__(self):
+        return self.name
+
+
+class ProhibitedSoftwareMatch(models.Model):
+    """
+    Факт срабатывания правила запрещённого ПО по конкретной заявке.
+    """
+
+    request = models.ForeignKey(
+        SoftwareRequest,
+        on_delete=models.CASCADE,
+        related_name="prohibited_matches",
+        verbose_name="Заявка",
+    )
+
+    rule = models.ForeignKey(
+        ProhibitedSoftwareRule,
+        on_delete=models.PROTECT,
+        related_name="matches",
+        verbose_name="Правило",
+    )
+
+    matched_value = models.TextField(
+        verbose_name="Что совпало",
+    )
+
+    matched_field = models.CharField(
+        max_length=64,
+        blank=True,
+        verbose_name="Поле совпадения",
+    )
+
+    is_overridden = models.BooleanField(
+        default=False,
+        verbose_name="Игнорировано ИБ",
+    )
+
+    overridden_by = models.ForeignKey(
+        "auth.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="overridden_prohibited_matches",
+        verbose_name="Кем игнорировано",
+    )
+
+    override_comment = models.TextField(
+        blank=True,
+        verbose_name="Комментарий override",
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата срабатывания",
+    )
+
+    overridden_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name="Дата override",
+    )
+
+    class Meta:
+        verbose_name = "Срабатывание запрещённого ПО"
+        verbose_name_plural = "Срабатывания запрещённого ПО"
+
+    def __str__(self):
+        return f"{self.request_id}: {self.rule.name}"

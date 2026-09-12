@@ -1,6 +1,14 @@
 from django.contrib import admin
 
-from .models import FileSource, FileTypePolicy, StoredFile
+from .models import (
+    FileSource,
+    FileTypePolicy,
+    StoredFile,
+    DownloadsPolicy,
+    ProtectedDownloadRule,
+    ProhibitedSoftwareRule,
+    ProhibitedSoftwareMatch,
+)
 
 
 @admin.register(FileSource)
@@ -88,4 +96,143 @@ class FileTypePolicyAdmin(admin.ModelAdmin):
         "extension",
         "mime_type",
         "description",
+    )
+
+
+@admin.register(DownloadsPolicy)
+class DownloadPolicyAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "is_active",
+        "allow_http",
+        "allow_https",
+        "allow_file_scheme",
+        "allow_url_credentials",
+        "allow_private_networks",
+        "max_file_size_mb",
+        "max_redirects",
+    )
+
+    list_filter = (
+        "is_active",
+        "allow_http",
+        "allow_https",
+        "allow_file_scheme",
+        "allow_url_credentials",
+        "allow_private_networks",
+    )
+
+    search_fields = (
+        "name",
+    )
+
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+    )
+
+
+@admin.register(ProtectedDownloadRule)
+class ProtectedDownloadRuleAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "is_active",
+        "scheme",
+        "host_pattern",
+        "credentials_mode",
+        "created_at",
+    )
+
+    list_filter = (
+        "is_active",
+        "scheme",
+        "credentials_mode",
+    )
+
+    search_fields = (
+        "name",
+        "host_pattern",
+        "reason",
+    )
+
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+    )
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def has_add_permission(self, request):
+        return request.user.is_superuser
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+
+@admin.register(ProhibitedSoftwareRule)
+class ProhibitedSoftwareRuleAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "is_active",
+        "match_type",
+        "target_field",
+        "pattern",
+        "requires_security_confirmation",
+        "allow_security_override",
+    )
+
+    list_filter = (
+        "is_active",
+        "match_type",
+        "target_field",
+        "requires_security_confirmation",
+        "allow_security_override",
+    )
+
+    search_fields = (
+        "name",
+        "pattern",
+        "reason",
+    )
+
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+    )
+
+
+@admin.register(ProhibitedSoftwareMatch)
+class ProhibitedSoftwareMatchAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "request",
+        "rule",
+        "matched_field",
+        "is_overridden",
+        "overridden_by",
+        "created_at",
+    )
+
+    list_filter = (
+        "is_overridden",
+        "matched_field",
+        "created_at",
+    )
+
+    search_fields = (
+        "request__source_url",
+        "rule__name",
+        "matched_value",
+    )
+
+    readonly_fields = (
+        "created_at",
+        "overridden_at",
     )
