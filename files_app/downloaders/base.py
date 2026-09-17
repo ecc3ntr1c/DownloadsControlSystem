@@ -2,34 +2,41 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
 
+from ..services.policies import DownloadPolicyConfig
+
 
 @dataclass(frozen=True)
 class DownloadResult:
     """
-    Результат скачивания файла.
+    Результат успешного скачивания файла.
     """
 
     file_path: Path
+
     original_url: str
     final_url: str
+
     filename: str
+    extension: str
+
     size: int
     sha256: str
-    content_type: str | None
+
+    mime_type: str | None
+    declared_content_type: str | None
 
 
 class BaseDownloader(ABC):
     """
-    Базовый интерфейс загрузчика файлов.
+    Базовый интерфейс всех downloader'ов.
     """
 
     @abstractmethod
     def download(
         self,
+        *,
         url: str,
         destination_dir: Path,
+        policy: DownloadPolicyConfig,
     ) -> DownloadResult:
-        """
-        Скачать файл и вернуть информацию о нём.
-        """
         raise NotImplementedError
