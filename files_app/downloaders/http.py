@@ -778,14 +778,12 @@ class HttpDownloader(BaseDownloader):
             )
         except ValueError as exc:
             raise DownloadHttpStatusError(
-                "Сервер вернул некорректный "
-                "Content-Length"
+                "Сервер вернул некорректный Content-Length"
             ) from exc
 
         if content_length < 0:
             raise DownloadHttpStatusError(
-                "Сервер вернул отрицательный "
-                "Content-Length",
+                "Сервер вернул отрицательный Content-Length",
                 status_code=response.status_code,
             )
 
@@ -794,8 +792,7 @@ class HttpDownloader(BaseDownloader):
             > policy.max_file_size_bytes
         ):
             raise DownloadSizeExceededError(
-                "Размер файла согласно Content-Length "
-                "превышает разрешённый лимит"
+                "Размер файла согласно Content-Length превышает разрешённый лимит"
             )
 
     @classmethod
@@ -814,8 +811,7 @@ class HttpDownloader(BaseDownloader):
             in cls.HTML_CONTENT_TYPES
         ):
             raise DownloadContentRejectedError(
-                "Политика запрещает скачивание "
-                "HTML-страниц"
+                "Политика запрещает скачивание HTML-страниц"
             )
 
     @staticmethod

@@ -233,7 +233,6 @@ class StoredFile(models.Model):
     """
 
     class StorageZone(models.TextChoices):
-        PENDING = "PENDING", "Ожидает проверки"
         QUARANTINE = "QUARANTINE", "Карантин"
         APPROVED = "APPROVED", "Разрешён"
         REJECTED = "REJECTED", "Отклонён"
@@ -296,7 +295,7 @@ class StoredFile(models.Model):
     storage_zone = models.CharField(
         max_length=32,
         choices=StorageZone.choices,
-        default=StorageZone.PENDING,
+        default=StorageZone.QUARANTINE,
         verbose_name="Зона хранения",
     )
 
