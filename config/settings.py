@@ -16,7 +16,8 @@ from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / ".env")
+if os.getenv("LOAD_PROJECT_DOTENV", "1") == "1":
+    load_dotenv(BASE_DIR / ".env")
 
 
 # Quick-start development settings - unsuitable for production
@@ -174,9 +175,4 @@ CELERY_TIMEZONE = "Europe/Moscow"
 
 
 # Дополнительные директории
-DOWNLOAD_QUARANTINE_DIR = Path(
-    os.getenv(
-        "DOWNLOAD_QUARANTINE_DIR",
-        str(BASE_DIR / "var" / "quarantine"),
-    )
-)
+FILE_STORAGE_ROOT = Path(os.getenv("FILE_STORAGE_ROOT") or BASE_DIR / "var")

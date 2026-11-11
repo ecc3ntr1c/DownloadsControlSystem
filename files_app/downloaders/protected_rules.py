@@ -1,3 +1,4 @@
+import ipaddress
 from dataclasses import dataclass
 
 from files_app.models import ProtectedDownloadRule
@@ -36,16 +37,11 @@ class ProtectedDownloadRuleService:
         parsed_url,
     ) -> MatchedProtectedRule | None:
 
-        hostname = (
-            parsed_url.hostname or ""
-        ).lower().rstrip(".")
+        hostname = self._normalize_host(parsed_url.hostname or "")
 
         scheme = parsed_url.scheme.lower()
 
-        has_credentials = bool(
-            parsed_url.username
-            or parsed_url.password
-        )
+        has_credentials = parsed_url.username is not None or parsed_url.password is not None
 
         for rule in self.get_active_rules():
 
@@ -89,30 +85,26 @@ class ProtectedDownloadRuleService:
             rule.scheme.lower() == scheme
         )
 
-    @staticmethod
+    @classmethod
     def _host_matches(
+        cls,
         *,
         rule: ProtectedDownloadRule,
         hostname: str,
     ) -> bool:
 
-        pattern = (
-            rule.host_pattern
-            .lower()
-            .rstrip(".")
-        )
-
-        if not pattern:
-            return False
-
-        # Точное совпадение.
-        if hostname == pattern:
+        if not rule.host_pattern.strip():
             return True
+        pattern = cls._normalize_host(rule.host_pattern.strip().lstrip("."))
+        return bool(pattern) and (hostname == pattern or hostname.endswith(f".{pattern}"))
 
-        # Совпадение с поддоменами.
-        return hostname.endswith(
-            f".{pattern}"
-        )
+    @staticmethod
+    def _normalize_host(host):
+        host = host.rstrip(".").lower()
+        try:
+            return str(ipaddress.ip_address(host))
+        except ValueError:
+            return host.encode("idna").decode("ascii")
 
     @staticmethod
     def _credentials_match(

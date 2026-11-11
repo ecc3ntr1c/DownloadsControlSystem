@@ -81,6 +81,8 @@ class DownloadUrlValidator:
             raise InvalidDownloadUrlError(
                 "URL не указан"
             )
+        if len(url) > 4096 or "\\" in url or any(ord(char) < 32 or ord(char) == 127 for char in url):
+            raise InvalidDownloadUrlError("Некорректные символы или длина URL.")
 
         try:
             parsed = urlparse(url.strip())
@@ -150,10 +152,7 @@ class DownloadUrlValidator:
         # 4. Username / password
         # --------------------------------------------------
 
-        has_credentials = bool(
-            parsed.username
-            or parsed.password
-        )
+        has_credentials = parsed.username is not None or parsed.password is not None
 
         if (
             has_credentials
@@ -255,7 +254,7 @@ class DownloadUrlValidator:
 
         hostname = hostname.strip().rstrip(".")
 
-        if not hostname:
+        if not hostname or "%" in hostname:
             raise InvalidDownloadUrlError(
                 "Hostname пуст"
             )
@@ -510,13 +509,15 @@ class DownloadUrlValidator:
             address = ipaddress.ip_address(
                 raw_address
             )
+            if isinstance(address, ipaddress.IPv6Address) and address.ipv4_mapped:
+                address = address.ipv4_mapped
 
             # Эти типы адресов не являются нормальной
             # точкой назначения для загрузки файла.
-            if address.is_unspecified:
+            if address.is_unspecified or address.is_loopback or address.is_link_local:
                 raise InvalidDownloadUrlError(
                     "Источник указывает "
-                    "на unspecified IP-адрес"
+                    "на локальный или служебный IP-адрес"
                 )
 
             if address.is_multicast:
@@ -525,7 +526,7 @@ class DownloadUrlValidator:
                     "на multicast IP-адрес"
                 )
 
-            if policy.allow_private_networks:
+            if policy.allow_private_networks and policy.allowed_domains and not address.is_reserved:
                 continue
 
             # Если private/internal сети запрещены,

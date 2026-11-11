@@ -3,6 +3,7 @@ import ipaddress
 import os
 import re
 import tempfile
+import time
 import unicodedata
 import uuid
 import magic
@@ -83,6 +84,8 @@ class _PinnedDnsTransport(httpx.HTTPTransport):
 
         super().__init__(
             retries=0,
+            trust_env=False,
+            limits=httpx.Limits(max_keepalive_connections=0),
         )
 
     def handle_request(
@@ -149,6 +152,7 @@ class HttpDownloader(BaseDownloader):
     CHUNK_SIZE = 1024 * 1024
 
     MAX_FILENAME_LENGTH = 180
+    MAX_DOWNLOAD_SECONDS = 480
 
     USER_AGENT = "DownloadsControl/1.0"
 
@@ -285,8 +289,10 @@ class HttpDownloader(BaseDownloader):
         current_url = url
 
         redirect_count = 0
+        deadline = time.monotonic() + self.MAX_DOWNLOAD_SECONDS
 
         while True:
+            self._check_deadline(deadline)
             validated_url = (
                 self.url_validator.validate(
                     url=current_url,
@@ -352,6 +358,7 @@ class HttpDownloader(BaseDownloader):
                     validated_url=validated_url,
                     destination_dir=destination_dir,
                     policy=policy,
+                    deadline=deadline,
                 )
 
                 return DownloadResult(
@@ -570,6 +577,7 @@ class HttpDownloader(BaseDownloader):
             validated_url: ValidatedUrl,
             destination_dir: Path,
             policy: DownloadPolicyConfig,
+            deadline: float,
     ) -> tuple[
         Path,
         str,
@@ -592,10 +600,12 @@ class HttpDownloader(BaseDownloader):
         - declared_content_type от HTTP-сервера.
         """
 
-        self._validate_content_length(
+        expected_size = self._validate_content_length(
             response=response,
             policy=policy,
         )
+        if response.headers.get("content-encoding", "identity").strip().lower() != "identity":
+            raise DownloadContentRejectedError("Сервер прислал файл с кодированием HTTP.")
 
         # Тип, заявленный HTTP-сервером.
         declared_content_type = (
@@ -649,6 +659,7 @@ class HttpDownloader(BaseDownloader):
                     for chunk in response.iter_bytes(
                             chunk_size=self.chunk_size
                     ):
+                        self._check_deadline(deadline)
                         if not chunk:
                             continue
 
@@ -694,6 +705,8 @@ class HttpDownloader(BaseDownloader):
 
                         total_size = next_size
 
+                    if not total_size or (expected_size is not None and total_size != expected_size):
+                        raise DownloadContentRejectedError("Файл пуст или получен не полностью.")
                     output_file.flush()
 
                     os.fsync(
@@ -714,6 +727,7 @@ class HttpDownloader(BaseDownloader):
             mime_type = self._detect_mime_type(
                 file_path=temp_path,
             )
+            self._validate_content_type(content_type=mime_type, policy=policy)
 
             try:
                 os.replace(
@@ -757,11 +771,16 @@ class HttpDownloader(BaseDownloader):
 
 
     @staticmethod
+    def _check_deadline(deadline: float) -> None:
+        if time.monotonic() >= deadline:
+            raise DownloadNetworkError("Превышено общее время скачивания.")
+
+    @staticmethod
     def _validate_content_length(
         *,
         response: httpx.Response,
         policy: DownloadPolicyConfig,
-    ) -> None:
+    ) -> int | None:
 
         raw_content_length = (
             response.headers.get(
@@ -770,7 +789,7 @@ class HttpDownloader(BaseDownloader):
         )
 
         if raw_content_length is None:
-            return
+            return None
 
         try:
             content_length = int(
@@ -778,7 +797,8 @@ class HttpDownloader(BaseDownloader):
             )
         except ValueError as exc:
             raise DownloadHttpStatusError(
-                "Сервер вернул некорректный Content-Length"
+                "Сервер вернул некорректный Content-Length",
+                status_code=response.status_code,
             ) from exc
 
         if content_length < 0:
@@ -794,6 +814,7 @@ class HttpDownloader(BaseDownloader):
             raise DownloadSizeExceededError(
                 "Размер файла согласно Content-Length превышает разрешённый лимит"
             )
+        return content_length
 
     @classmethod
     def _validate_content_type(
@@ -1142,6 +1163,7 @@ class HttpDownloader(BaseDownloader):
             redacted = parsed._replace(
                 netloc=netloc,
                 fragment="",
+                query="",
             )
 
             return urlunparse(

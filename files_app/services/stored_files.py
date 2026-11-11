@@ -4,6 +4,7 @@ from django.db import transaction
 
 from files_app.downloaders.base import DownloadResult
 from files_app.models import FileSource, StoredFile
+from files_app.services.storage import FileStorageService
 
 
 class StoredFileService:
@@ -44,7 +45,7 @@ class StoredFileService:
 
             size_bytes=result.size,
 
-            storage_path=str(result.file_path),
+            storage_path=FileStorageService().relative_path(result.file_path),
             storage_zone=StoredFile.StorageZone.QUARANTINE,
 
             is_available=False,

@@ -1,7 +1,5 @@
-from pathlib import Path
 
 from celery import shared_task
-from django.conf import settings
 
 from audit.models import AuditLog
 from audit.services import AuditService
@@ -109,13 +107,8 @@ def download_file_source(
     # --------------------------------------------------
 
     try:
-        stored_file = (
-            DownloadService.download_source(
-                source=source,
-                destination_dir=Path(
-                    settings.DOWNLOAD_QUARANTINE_DIR
-                ),
-            )
+        stored_file = DownloadService.download_source(
+            source=source,
         )
 
     except Exception as exc:
