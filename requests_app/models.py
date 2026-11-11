@@ -85,6 +85,21 @@ class SoftwareRequest(models.Model):
         verbose_name="Комментарий ИБ",
     )
 
+    review_file = models.ForeignKey(
+        "files_app.StoredFile", on_delete=models.SET_NULL,
+        null=True, blank=True, related_name="+",
+    )
+    decided_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
+        null=True, blank=True, related_name="reviewed_software_requests",
+    )
+    decided_at = models.DateTimeField(null=True, blank=True)
+    processing_error = models.CharField(max_length=512, blank=True)
+    processing_due_at = models.DateTimeField(null=True, blank=True, db_index=True)
+    processing_token = models.UUIDField(null=True, blank=True, editable=False)
+    processing_attempts = models.PositiveSmallIntegerField(default=0)
+    last_queued_at = models.DateTimeField(null=True, blank=True)
+
     external_system = models.CharField(
         max_length=64,
         blank=True,

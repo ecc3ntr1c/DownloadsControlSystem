@@ -334,6 +334,12 @@ class HttpDownloader(BaseDownloader):
                         current_url,
                         location.strip(),
                     )
+                    try:
+                        parsed_location = urlparse(current_url)
+                    except ValueError as exc:
+                        raise DownloadRedirectError("Некорректный адрес перенаправления.") from exc
+                    if parsed_location.username is not None or parsed_location.password is not None:
+                        raise DownloadRedirectError("Перенаправление содержит учётные данные.")
 
                     redirect_count += 1
 

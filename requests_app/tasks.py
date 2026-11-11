@@ -1,171 +1,51 @@
-import time
+import logging
+from datetime import timedelta
 
 from celery import shared_task
-from django.db import transaction
-
-from audit.models import AuditLog
-from audit.services import AuditService
-from files_app.models import FileSource
-from scanning.models import ScanResult
+from django.db.models import Q
+from django.utils import timezone
+from kombu.exceptions import OperationalError
 
 from .models import SoftwareRequest
+from .processing import process_request
+
+logger = logging.getLogger(__name__)
+TASK_LIMITS = {"acks_late": True, "reject_on_worker_lost": True, "soft_time_limit": 810, "time_limit": 840}
+
+
+@shared_task(**TASK_LIMITS)
+def process_software_request_task(request_id):
+    return process_request(request_id)
+
+
+def _pending_requests(now):
+    return SoftwareRequest.objects.filter(
+        Q(last_queued_at__isnull=True) | Q(last_queued_at__lte=now - timedelta(minutes=2)),
+        request_status=SoftwareRequest.RequestStatus.UNDER_SECURITY_REVIEW,
+        processing_due_at__lte=now,
+    )
+
+
+def publish_request(request_id):
+    """Поставить задачу в очередь. Строка в БД остаётся источником повторной постановки."""
+    now = timezone.now()
+    reserved = _pending_requests(now).filter(pk=request_id).update(last_queued_at=now)
+    if not reserved:
+        return False
+    try:
+        process_software_request_task.apply_async(args=(request_id,), retry=False, expires=120)
+        return True
+    except (OperationalError, OSError):
+        logger.warning("Очередь недоступна, заявка %s сохранена для повторной постановки", request_id)
+        SoftwareRequest.objects.filter(pk=request_id, last_queued_at=now).update(last_queued_at=None)
+        return False
 
 
 @shared_task
-def process_software_request_task(request_id: int) -> None:
-    """
-    Первая версия фоновой обработки заявки.
-
-    Пока это имитация:
-    1. проверка URL;
-    2. скачивание;
-    3. антивирусная проверка;
-    4. сохранение mock-результата.
-
-    Позже здесь появятся реальные:
-    - URL validator;
-    - DownloadManager;
-    - FileStorageService;
-    - AntivirusManager.
-    """
-
-    try:
-        software_request = SoftwareRequest.objects.get(id=request_id)
-    except SoftwareRequest.DoesNotExist:
-        return
-
-    file_source = software_request.file_sources.first()
-
-    if software_request.request_status == SoftwareRequest.RequestStatus.REJECTED:
-        software_request.scan_status = SoftwareRequest.ScanStatus.CANCELLED
-        software_request.save(update_fields=["scan_status", "updated_at"])
-        return
-
-    software_request.scan_status = SoftwareRequest.ScanStatus.URL_VALIDATION
-    software_request.save(update_fields=["scan_status", "updated_at"])
-
-    if file_source:
-        file_source.status = FileSource.SourceStatus.VALIDATING
-        file_source.save(update_fields=["status", "updated_at"])
-
-    AuditService.log(
-        action="URL_VALIDATION_STARTED",
-        actor_type=AuditLog.ActorType.WORKER,
-        object_type="SoftwareRequest",
-        object_id=software_request.id,
-        details={"source_url": software_request.source_url},
+def dispatch_pending_requests():
+    due = list(
+        _pending_requests(timezone.now()).order_by("processing_due_at", "pk").values_list("pk", flat=True)[:50]
     )
-
-    time.sleep(2)
-
-    if software_request.request_status == SoftwareRequest.RequestStatus.REJECTED:
-        software_request.scan_status = SoftwareRequest.ScanStatus.CANCELLED
-        software_request.save(update_fields=["scan_status", "updated_at"])
-        return
-
-    if file_source:
-        file_source.status = FileSource.SourceStatus.VALID
-        file_source.save(update_fields=["status", "updated_at"])
-
-    software_request.scan_status = SoftwareRequest.ScanStatus.DOWNLOADING
-    software_request.save(update_fields=["scan_status", "updated_at"])
-
-    if file_source:
-        file_source.status = FileSource.SourceStatus.DOWNLOAD_STARTED
-        file_source.save(update_fields=["status", "updated_at"])
-
-    AuditService.log(
-        action="FILE_DOWNLOAD_STARTED",
-        actor_type=AuditLog.ActorType.WORKER,
-        object_type="SoftwareRequest",
-        object_id=software_request.id,
-        details={
-            "source_type": file_source.source_type if file_source else "UNKNOWN",
-        },
-    )
-
-    time.sleep(2)
-
-    if software_request.request_status == SoftwareRequest.RequestStatus.REJECTED:
-        software_request.scan_status = SoftwareRequest.ScanStatus.CANCELLED
-        software_request.save(update_fields=["scan_status", "updated_at"])
-        return
-
-    if file_source:
-        file_source.status = FileSource.SourceStatus.DOWNLOADED
-        file_source.save(update_fields=["status", "updated_at"])
-
-    software_request.scan_status = SoftwareRequest.ScanStatus.SCANNING
-    software_request.save(update_fields=["scan_status", "updated_at"])
-
-    AuditService.log(
-        action="SCAN_STARTED",
-        actor_type=AuditLog.ActorType.WORKER,
-        object_type="SoftwareRequest",
-        object_id=software_request.id,
-        details={"provider": "MOCK"},
-    )
-
-    time.sleep(2)
-
-    with transaction.atomic():
-        software_request = SoftwareRequest.objects.select_for_update().get(
-            id=request_id
-        )
-
-        if software_request.request_status == SoftwareRequest.RequestStatus.REJECTED:
-            software_request.scan_status = (
-                SoftwareRequest.ScanStatus.COMPLETED_AFTER_REJECTION
-            )
-            software_request.save(update_fields=["scan_status", "updated_at"])
-
-            AuditService.log(
-                action="SCAN_COMPLETED_AFTER_REJECTION",
-                actor_type=AuditLog.ActorType.WORKER,
-                object_type="SoftwareRequest",
-                object_id=software_request.id,
-            )
-            return
-
-        ScanResult.objects.create(
-            request=software_request,
-            provider=ScanResult.Provider.MOCK,
-            verdict=ScanResult.Verdict.CLEAN,
-            risk_score=0,
-            risk_level=SoftwareRequest.RiskLevel.LOW,
-            raw_result={
-                "message": "Mock scan completed successfully",
-            },
-            normalized_result={
-                "verdict": "CLEAN",
-                "risk_score": 0,
-                "risk_level": "LOW",
-                "recommendation": "manual_review_required",
-            },
-        )
-
-        software_request.scan_status = SoftwareRequest.ScanStatus.SCAN_COMPLETED
-        software_request.request_status = (
-            SoftwareRequest.RequestStatus.WAITING_SECURITY_DECISION
-        )
-        software_request.risk_level = SoftwareRequest.RiskLevel.LOW
-        software_request.save(
-            update_fields=[
-                "scan_status",
-                "request_status",
-                "risk_level",
-                "updated_at",
-            ]
-        )
-
-    AuditService.log(
-        action="SCAN_COMPLETED",
-        actor_type=AuditLog.ActorType.WORKER,
-        object_type="SoftwareRequest",
-        object_id=software_request.id,
-        details={
-            "provider": "MOCK",
-            "verdict": "CLEAN",
-            "risk_level": "LOW",
-        },
-    )
+    for request_id in due:
+        if not publish_request(request_id):
+            break

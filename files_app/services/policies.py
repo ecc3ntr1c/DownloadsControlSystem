@@ -1,5 +1,7 @@
 from dataclasses import dataclass, field
 
+from django.conf import settings
+
 from files_app.models import DownloadsPolicy
 
 
@@ -56,6 +58,10 @@ class DownloadPolicyConfig:
     )
 
 
+class DownloadPolicyUnavailable(RuntimeError):
+    pass
+
+
 class DownloadPolicyService:
     """
     Работа с политиками скачивания.
@@ -70,7 +76,7 @@ class DownloadPolicyService:
         )
 
         if not policy:
-            raise RuntimeError(
+            raise DownloadPolicyUnavailable(
                 "Не найдена активная политика скачивания"
             )
 
@@ -95,11 +101,7 @@ class DownloadPolicyService:
                 policy.allow_private_networks
             ),
 
-            max_file_size_bytes=(
-                policy.max_file_size_mb *
-                1024 *
-                1024
-            ),
+            max_file_size_bytes=min(policy.max_file_size_mb * 1024 * 1024, settings.CLAMD_MAX_FILE_BYTES),
 
             max_redirects=(
                 policy.max_redirects

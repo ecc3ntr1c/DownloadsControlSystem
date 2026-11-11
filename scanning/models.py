@@ -10,6 +10,7 @@ class ScanResult(models.Model):
     """
 
     class Provider(models.TextChoices):
+        CLAMAV = "CLAMAV", "ClamAV"
         MOCK = "MOCK", "Mock-провайдер"
         VIRUSTOTAL = "VIRUSTOTAL", "VirusTotal"
         KASPERSKY = "KASPERSKY", "Kaspersky"
@@ -41,9 +42,11 @@ class ScanResult(models.Model):
     provider = models.CharField(
         max_length=32,
         choices=Provider.choices,
-        default=Provider.MOCK,
+        default=Provider.CLAMAV,
         verbose_name="Провайдер проверки",
     )
+
+    file_sha256 = models.CharField(max_length=64, blank=True)
 
     verdict = models.CharField(
         max_length=32,

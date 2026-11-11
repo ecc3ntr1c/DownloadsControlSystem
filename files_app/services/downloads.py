@@ -2,8 +2,6 @@ from contextlib import contextmanager
 from dataclasses import replace
 from pathlib import Path
 
-from django.db import transaction
-
 from audit.models import AuditLog
 from audit.services import AuditService
 from files_app.downloaders import build_download_manager
@@ -77,14 +75,3 @@ class DownloadService:
             details={"file_source_id": source.pk, "error_code": failure.code},
         )
         return failure
-
-    @staticmethod
-    def download_source(*, source):
-        try:
-            with DownloadService.fetch(source) as result, DownloadService.quarantine(result) as quarantined:
-                with transaction.atomic():
-                    return DownloadService.register(source, quarantined)
-        except Exception as exc:
-            with transaction.atomic():
-                DownloadService.record_failure(source, exc)
-            raise

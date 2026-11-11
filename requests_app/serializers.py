@@ -1,9 +1,21 @@
 from rest_framework import serializers
 
 from .models import SoftwareRequest
+from .source_urls import parse_source_url
 
 
-class SoftwareRequestCreateSerializer(serializers.ModelSerializer):
+class RequestInputSerializer(serializers.ModelSerializer):
+    description = serializers.CharField(max_length=4000)
+    business_reason = serializers.CharField(max_length=4000)
+
+    def validate_source_url(self, value):
+        try:
+            return parse_source_url(value).geturl()
+        except ValueError as exc:
+            raise serializers.ValidationError(str(exc)) from exc
+
+
+class SoftwareRequestCreateSerializer(RequestInputSerializer):
     """
     Serializer для создания заявки пользователем.
 
@@ -22,7 +34,7 @@ class SoftwareRequestCreateSerializer(serializers.ModelSerializer):
         )
 
 
-class ExternalSoftwareRequestCreateSerializer(serializers.ModelSerializer):
+class ExternalSoftwareRequestCreateSerializer(RequestInputSerializer):
     """
     Serializer для создания заявки внешней системой.
 

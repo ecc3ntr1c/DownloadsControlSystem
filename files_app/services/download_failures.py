@@ -13,7 +13,9 @@ from files_app.downloaders.exceptions import (
     DownloadStorageError,
     InvalidDownloadUrlError,
     ProtectedDownloadError,
+    UnsupportedSourceError,
 )
+from files_app.services.policies import DownloadPolicyUnavailable
 
 
 @dataclass(frozen=True)
@@ -37,6 +39,12 @@ class DownloadFailureClassifier:
     def classify(
         exception: Exception,
     ) -> DownloadFailure:
+
+        if isinstance(exception, DownloadPolicyUnavailable):
+            return DownloadFailure("POLICY_UNAVAILABLE", "Не настроена активная политика скачивания.", False)
+
+        if isinstance(exception, UnsupportedSourceError):
+            return DownloadFailure("UNSUPPORTED_SOURCE", "Тип источника пока не поддерживается.", False)
 
         if isinstance(
             exception,

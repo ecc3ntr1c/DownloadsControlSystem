@@ -35,5 +35,6 @@ def build_download_manager() -> DownloadManager:
         source_type=FileSource.SourceType.HTTP,
         downloader=http_downloader,
     )
+    manager.register_downloader(FileSource.SourceType.YANDEX_DISK, http_downloader)
 
     return manager

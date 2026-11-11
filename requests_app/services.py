@@ -1,85 +1,54 @@
 from django.db import transaction
 from django.utils import timezone
 
-from urllib.parse import urlparse
-
 from audit.models import AuditLog
 from audit.services import AuditService
-
 from files_app.models import FileSource
 
 from .models import SoftwareRequest
+from .source_urls import parse_source_url
 
 
 class SoftwareRequestService:
-    """
-    Бизнес-логика работы с заявками.
-    """
-
     @staticmethod
-    def detect_source_type(url: str) -> str:
-        """
-        Предварительное определение типа источника.
-
-        Пока простая логика:
-        - disk.yandex.ru или yadi.sk считаем Яндекс.Диском;
-        - остальные http/https считаем обычной ссылкой.
-        """
-        parsed_url = urlparse(url)
-        domain = parsed_url.netloc.lower()
-
-        if "disk.yandex.ru" in domain or "yadi.sk" in domain:
+    def detect_source_type(url):
+        try:
+            hostname = parse_source_url(url).hostname.rstrip(".")
+        except ValueError:
+            return FileSource.SourceType.UNKNOWN
+        if hostname in {"disk.yandex.ru", "yadi.sk"}:
             return FileSource.SourceType.YANDEX_DISK
-
-        if parsed_url.scheme in ("http", "https"):
-            return FileSource.SourceType.HTTP
-
-        return FileSource.SourceType.UNKNOWN
+        return FileSource.SourceType.HTTP
 
     @staticmethod
-    def create_request(*, user, validated_data, request_meta=None) -> SoftwareRequest:
+    @transaction.atomic
+    def create_request(*, user, validated_data, request_meta=None):
+        from .tasks import publish_request
+
+        parsed = parse_source_url(validated_data["source_url"])
+        url = parsed._replace(fragment="").geturl()
         software_request = SoftwareRequest.objects.create(
             user=user,
-            source_url=validated_data["source_url"],
+            source_url=url,
             description=validated_data["description"],
             business_reason=validated_data["business_reason"],
             external_system=validated_data.get("external_system", ""),
             external_request_id=validated_data.get("external_request_id", ""),
             request_status=SoftwareRequest.RequestStatus.UNDER_SECURITY_REVIEW,
-            scan_status=SoftwareRequest.ScanStatus.PENDING,
+            processing_due_at=timezone.now(),
         )
-
-        parsed_url = urlparse(software_request.source_url)
-
-        FileSource.objects.create(
-            request=software_request,
-            original_url=software_request.source_url,
-            source_type=SoftwareRequestService.detect_source_type(
-                software_request.source_url
-            ),
-            status=FileSource.SourceStatus.CREATED,
-            domain=parsed_url.netloc.lower(),
+        source = FileSource.objects.create(
+            request=software_request, original_url=url, domain=parsed.hostname[:255],
+            source_type=SoftwareRequestService.detect_source_type(url),
         )
-
         AuditService.log(
-            action="REQUEST_CREATED",
-            actor=user,
-            actor_type=AuditLog.ActorType.USER,
-            object_type="SoftwareRequest",
-            object_id=software_request.id,
+            action="REQUEST_CREATED", actor=user, actor_type=AuditLog.ActorType.USER,
+            object_type="SoftwareRequest", object_id=software_request.pk,
             ip_address=(request_meta or {}).get("ip_address"),
             user_agent=(request_meta or {}).get("user_agent", ""),
-            details={
-                "source_url": software_request.source_url,
-                "external_system": software_request.external_system,
-                "external_request_id": software_request.external_request_id,
-            },
+            details={"source_domain": source.domain, "file_source_id": source.pk},
         )
-
-        from .tasks import process_software_request_task
-
-        process_software_request_task.delay(software_request.id)
-
+        transaction.on_commit(lambda: publish_request(software_request.pk), robust=True)
         return software_request
 
 

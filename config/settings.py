@@ -172,6 +172,31 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "Europe/Moscow"
+CELERY_TASK_IGNORE_RESULT = True
+CELERY_BROKER_CONNECTION_TIMEOUT = 3
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    "socket_connect_timeout": 3,
+    "socket_timeout": 3,
+    "visibility_timeout": 3600,
+}
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+CELERY_BEAT_SCHEDULE = {
+    "dispatch-pending-requests": {
+        "task": "requests_app.tasks.dispatch_pending_requests",
+        "schedule": 15.0,
+        "options": {"expires": 15, "queue": "maintenance"},
+    },
+}
+
+CLAMD_HOST = os.getenv("CLAMD_HOST", "localhost")
+CLAMD_PORT = int(os.getenv("CLAMD_PORT", "3310"))
+CLAMD_TIMEOUT_SECONDS = 120
+CLAMD_MAX_FILE_BYTES = 50 * 1024 * 1024
+PROCESS_MAX_ATTEMPTS = 3
+PROCESS_LEASE_SECONDS = 900
+QUARANTINE_RETENTION_DAYS = int(os.getenv("QUARANTINE_RETENTION_DAYS", "14"))
+APPROVED_RETENTION_DAYS = int(os.getenv("APPROVED_RETENTION_DAYS", "30"))
+REJECTED_RETENTION_DAYS = int(os.getenv("REJECTED_RETENTION_DAYS", "7"))
 
 
 # Дополнительные директории
