@@ -2,25 +2,13 @@ import hashlib
 import socket
 import struct
 import time
-from dataclasses import dataclass
 
 from django.conf import settings
 
 from files_app.services.storage import FileStorageError, FileStorageService
 
+from .contracts import ScanOutcome, ScannerError
 from .models import ScanResult
-
-
-class ScannerError(Exception):
-    def __init__(self, message, *, retryable=False):
-        super().__init__(message)
-        self.retryable = retryable
-
-
-@dataclass(frozen=True)
-class ScanOutcome:
-    verdict: str
-    signature: str = ""
 
 
 class ClamAVScanner:
@@ -54,7 +42,7 @@ class ClamAVScanner:
             raise ScannerError("Не удалось завершить проверку в ClamAV.", retryable=True) from exc
 
         if reply == "stream: OK":
-            return ScanOutcome(ScanResult.Verdict.CLEAN)
+            return ScanOutcome(ScanResult.Verdict.CLEAN, report={"response": reply})
         if reply.startswith("stream: ") and reply.endswith(" FOUND"):
             signature = reply.removeprefix("stream: ").removesuffix(" FOUND").strip()
             if signature:
@@ -62,7 +50,7 @@ class ClamAVScanner:
                     ScanResult.Verdict.SUSPICIOUS if signature.startswith("Heuristics.")
                     else ScanResult.Verdict.MALICIOUS
                 )
-                return ScanOutcome(verdict, signature)
+                return ScanOutcome(verdict, signature, report={"response": reply})
         raise ScannerError("ClamAV не подтвердил завершение проверки.")
 
     def ping(self):

@@ -14,7 +14,7 @@ from files_app.downloaders.exceptions import DownloadNetworkError
 from files_app.models import FileTypePolicy, ProhibitedSoftwareRule, StoredFile
 from files_app.services.storage import FileStorageService
 from scanning.clamav import ScanOutcome, ScannerError
-from scanning.models import ScanResult
+from scanning.models import ProviderScan, ScanResult
 
 from .models import SoftwareRequest
 from .processing import _claim_request, process_request
@@ -112,6 +112,7 @@ class ProcessingTests(TestCase):
             factory.return_value.download.side_effect = download_fixture
             self.assertEqual(process_request(request.pk), "retry_scheduled")
             SoftwareRequest.objects.filter(pk=request.pk).update(processing_due_at=timezone.now())
+            ProviderScan.objects.filter(file__request=request).update(next_check_at=timezone.now())
             self.assertEqual(process_request(request.pk), "review_ready")
             factory.return_value.download.assert_called_once()
         self.assertEqual(request.files.count(), 1)

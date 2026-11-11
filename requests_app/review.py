@@ -22,6 +22,25 @@ def latest_scan(request):
     return request.scan_results.order_by("-pk").first()
 
 
+def scan_reports(request):
+    checks = list(request.review_file.antivirus_checks.select_related("provider", "result")) if request.review_file_id else []
+    if checks:
+        return [{
+            "name": check.provider_name,
+            "provider": check.provider.kind,
+            "status": "finished" if check.result_id else "waiting_report" if check.remote_id else "pending",
+            "last_error": check.last_error,
+            "result": check.result,
+        } for check in checks]
+    result = latest_scan(request)
+    if result is None:
+        return []
+    return [{
+        "name": result.get_provider_display(), "provider": result.provider, "status": "finished",
+        "last_error": "", "result": result,
+    }]
+
+
 def approval_blockers(request, stored_file, scan, matches):
     if not decision_ready(request):
         return ["Решение доступно после автоматической обработки заявки."]
@@ -35,15 +54,29 @@ def approval_blockers(request, stored_file, scan, matches):
         return ["В карантине нет проверенного файла этой заявки."]
     if stored_file.delete_after is None or stored_file.delete_after <= timezone.now():
         return ["Истёк срок хранения файла в карантине."]
-    if (
-        scan is None or scan.file_id != stored_file.pk or scan.provider != ScanResult.Provider.CLAMAV
-        or scan.verdict != ScanResult.Verdict.CLEAN or not scan.file_sha256
-        or scan.file_sha256 != stored_file.file_hash_sha256
-    ):
-        return ["Для выдачи нужен вердикт «Чистый» от ClamAV для этого файла."]
+    checks = list(stored_file.antivirus_checks.select_related("provider", "result"))
+    if checks:
+        blocking_providers = [
+            check.provider_name for check in checks
+            if not _clean_result(check.result, stored_file, check.provider.kind)
+        ]
+        if blocking_providers:
+            names = ", ".join(blocking_providers)
+            return [f"Для выдачи нужны чистые отчёты всех назначенных антивирусов. Требуется: {names}."]
+    elif not _clean_result(scan, stored_file, ScanResult.Provider.CLAMAV):
+        return ["Для выдачи нужен подтверждённый чистый отчёт для этого файла."]
     if any(prevents_release(match.rule) for match in matches):
         return ["Запрещающее правило не допускает исключения."]
     return file_type_blockers(stored_file)
+
+
+def _clean_result(result, stored_file, provider):
+    return (
+        result is not None and result.request_id == stored_file.request_id
+        and result.file_id == stored_file.pk and result.provider == provider
+        and result.verdict == ScanResult.Verdict.CLEAN and bool(result.file_sha256)
+        and result.file_sha256 == stored_file.file_hash_sha256
+    )
 
 
 def can_reprocess(request):

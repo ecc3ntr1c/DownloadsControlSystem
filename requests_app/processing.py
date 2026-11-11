@@ -21,8 +21,10 @@ from files_app.services.review_policies import (
 )
 from notifications.models import Notification
 from notifications.services import notify_request_owner
-from scanning.clamav import ClamAVScanner, ScannerError
-from scanning.models import ScanResult
+from scanning.clamav import ClamAVScanner
+from scanning.contracts import ScanOutcome, ScannerError
+from scanning.models import AntivirusProvider, ProviderScan, ScanResult
+from scanning.remote import remote_scanner
 
 from .models import SoftwareRequest
 from .source_urls import parse_source_url
@@ -51,24 +53,21 @@ def process_request(request_id):
     stored_file = None
     try:
         source = _get_source(claimed)
-        _check_registry(claimed, source)
+        if claimed.review_file_id is None or not ProviderScan.objects.filter(file_id=claimed.review_file_id).exists():
+            _check_registry(claimed, source)
         stored_file = claimed.review_file or _download(claimed, source)
+        if stored_file.request_id != claimed.pk or stored_file.storage_zone != StoredFile.StorageZone.QUARANTINE:
+            raise ProcessingBlocked("Проверять можно только файл этой заявки из карантина.")
         if stored_file.delete_after is not None and stored_file.delete_after <= timezone.now():
             raise ProcessingBlocked("Истёк срок хранения файла в карантине.")
         blockers = file_type_blockers(stored_file)
         if blockers:
             raise ProcessingBlocked(" ".join(blockers))
-        _start_scan(claimed, stored_file)
-        outcome = ClamAVScanner().scan(stored_file)
-        _complete_scan(claimed, stored_file, outcome)
+        return _process_antiviruses(claimed, stored_file)
     except LeaseLost:
         return "skipped"
     except (DownloadError, DownloadPolicyUnavailable) as exc:
         return _record_failure(claimed, download_failure=(source, exc))
-    except ScannerError as exc:
-        return _record_failure(
-            claimed, str(exc), retryable=exc.retryable, scanner_file=stored_file,
-        )
     except (ProcessingBlocked, RuleConfigurationError) as exc:
         return _record_failure(claimed, str(exc))
     except SoftTimeLimitExceeded:
@@ -76,7 +75,6 @@ def process_request(request_id):
     except Exception as exc:
         logger.error("Ошибка обработки заявки %s (%s)", request_id, type(exc).__name__)
         return _record_failure(claimed, "Внутренняя ошибка обработки заявки.")
-    return "review_ready"
 
 
 @transaction.atomic
@@ -95,7 +93,7 @@ def _claim_request(request_id):
     request.processing_due_at = now + timedelta(seconds=settings.PROCESS_LEASE_SECONDS)
     request.processing_attempts += 1
     request.processing_error = ""
-    request.scan_status = ScanStatus.URL_VALIDATION
+    request.scan_status = ScanStatus.SCANNING if request.review_file_id else ScanStatus.URL_VALIDATION
     request.save(update_fields=[
         "processing_token", "processing_due_at", "processing_attempts", "processing_error",
         "scan_status", "updated_at",
@@ -159,33 +157,162 @@ def _download(claimed, source):
             return stored_file
 
 
+def _process_antiviruses(claimed, stored_file):
+    _start_scan(claimed, stored_file)
+    checks = stored_file.antivirus_checks.filter(result__isnull=True).select_related("provider")
+    for check in checks:
+        now = timezone.now()
+        deadline = check.created_at + timedelta(seconds=settings.ANTIVIRUS_MAX_WAIT_SECONDS)
+        if check.next_check_at > now and deadline > now:
+            continue
+        try:
+            if deadline <= now:
+                raise ScannerError("Истекло время ожидания отчёта антивируса.")
+            if not check.provider.enabled:
+                raise ScannerError("Подключение антивируса отключено администратором.")
+            if check.provider.kind == AntivirusProvider.Kind.CLAMAV:
+                outcome = ClamAVScanner().scan(stored_file)
+            else:
+                outcome = _scan_remote(claimed, check, stored_file)
+            if outcome is not None:
+                _save_scan_outcome(claimed, check, outcome)
+        except ScannerError as exc:
+            _save_scan_error(claimed, check, exc)
+    return _finish_or_defer_scans(claimed, stored_file)
+
+
 @transaction.atomic
 def _start_scan(claimed, stored_file):
     request = _locked_request(claimed)
+    if stored_file.antivirus_checks.exists():
+        return
+    providers = list(AntivirusProvider.objects.filter(enabled=True))
+    if not providers:
+        raise ProcessingBlocked("Администратор не подключил ни одного антивируса.")
+    ProviderScan.objects.bulk_create([
+        ProviderScan(file=stored_file, provider=provider, provider_name=provider.name) for provider in providers
+    ])
     request.scan_status = ScanStatus.SCANNING
     request.save(update_fields=["scan_status", "updated_at"])
-    _audit(request, "SCAN_STARTED", stored_file_id=stored_file.pk)
+    _audit(request, "SCAN_STARTED", stored_file_id=stored_file.pk, providers=[provider.pk for provider in providers])
+
+
+def _scan_remote(claimed, check, stored_file):
+    scanner = remote_scanner(check.provider)
+    if not check.remote_id:
+        if check.submitting:
+            raise ScannerError("Предыдущая отправка не подтверждена. Проверь историю у антивируса.")
+        # Если процесс оборвётся между POST и сохранением ID, файл не отправится повторно автоматически.
+        with transaction.atomic():
+            _locked_request(claimed)
+            check.submitting = True
+            check.save(update_fields=["submitting"])
+        remote_id = scanner.submit(stored_file)
+        _wait_for_report(claimed, check, remote_id)
+        return None
+
+    outcome = scanner.poll(check.remote_id, stored_file.file_hash_sha256)
+    if outcome is None:
+        _wait_for_report(claimed, check, check.remote_id)
+    return outcome
 
 
 @transaction.atomic
-def _complete_scan(claimed, stored_file, outcome):
-    request = _locked_request(claimed)
-    risks = {
-        ScanResult.Verdict.CLEAN: (Risk.LOW, 0),
-        ScanResult.Verdict.SUSPICIOUS: (Risk.HIGH, 75),
-        ScanResult.Verdict.MALICIOUS: (Risk.CRITICAL, 100),
-    }
-    risk, score = risks[outcome.verdict]
-    result = ScanResult.objects.create(
-        request=request, file=stored_file, file_sha256=stored_file.file_hash_sha256,
-        provider=ScanResult.Provider.CLAMAV, verdict=outcome.verdict, risk_level=risk, risk_score=score,
-        normalized_result={"signature": outcome.signature} if outcome.signature else {},
+def _wait_for_report(claimed, check, remote_id):
+    _locked_request(claimed)
+    check.remote_id = remote_id
+    check.submitting = False
+    check.failures = 0
+    check.last_error = ""
+    check.next_check_at = timezone.now() + timedelta(seconds=settings.ANTIVIRUS_POLL_SECONDS)
+    check.save(update_fields=["remote_id", "submitting", "failures", "last_error", "next_check_at"])
+
+
+RISKS = {
+    ScanResult.Verdict.CLEAN: (Risk.LOW, 0),
+    ScanResult.Verdict.UNKNOWN: (Risk.UNKNOWN, 0),
+    ScanResult.Verdict.FAILED: (Risk.UNKNOWN, 0),
+    ScanResult.Verdict.SUSPICIOUS: (Risk.HIGH, 75),
+    ScanResult.Verdict.MALICIOUS: (Risk.CRITICAL, 100),
+}
+
+
+def _new_result(request, check, outcome):
+    risk, score = RISKS[outcome.verdict]
+    summary = dict(outcome.summary)
+    if outcome.signature:
+        summary["signature"] = outcome.signature
+    return ScanResult.objects.create(
+        request=request, file=check.file,
+        file_sha256=check.file.file_hash_sha256 if outcome.verdict != ScanResult.Verdict.FAILED else "",
+        provider=check.provider.kind, verdict=outcome.verdict, risk_level=risk, risk_score=score,
+        normalized_result=summary, raw_result=outcome.report,
     )
+
+
+@transaction.atomic
+def _save_scan_outcome(claimed, check, outcome):
+    request = _locked_request(claimed)
+    check.result = _new_result(request, check, outcome)
+    check.last_error = ""
+    check.save(update_fields=["result", "last_error"])
+    _audit(request, "ANTIVIRUS_SCAN_COMPLETED", provider_id=check.provider_id, scan_result_id=check.result_id)
+
+
+@transaction.atomic
+def _save_scan_error(claimed, check, error):
+    request = _locked_request(claimed)
+    check.failures += 1
+    check.last_error = str(error)[:512]
+    result = _new_result(request, check, ScanOutcome(ScanResult.Verdict.FAILED, summary={"error": check.last_error}))
+    if error.retryable and check.failures < settings.PROCESS_MAX_ATTEMPTS:
+        delay = error.retry_after or 15 * 2 ** (check.failures - 1)
+        check.submitting = False
+        check.next_check_at = timezone.now() + timedelta(seconds=delay)
+    else:
+        check.result = result
+    check.save(update_fields=["failures", "last_error", "result", "submitting", "next_check_at"])
+    _audit(request, "ANTIVIRUS_SCAN_FAILED", provider_id=check.provider_id, scan_result_id=result.pk)
+
+
+@transaction.atomic
+def _finish_or_defer_scans(claimed, stored_file):
+    request = _locked_request(claimed)
+    checks = list(stored_file.antivirus_checks.select_related("result"))
+    pending = [check for check in checks if check.result_id is None]
+    if pending:
+        request.processing_due_at = min(
+            min(check.next_check_at, check.created_at + timedelta(seconds=settings.ANTIVIRUS_MAX_WAIT_SECONDS))
+            for check in pending
+        )
+        request.processing_token = None
+        request.processing_attempts = 0
+        request.last_queued_at = None
+        request.save(update_fields=[
+            "processing_due_at", "processing_token", "processing_attempts", "last_queued_at", "updated_at",
+        ])
+        return "retry_scheduled" if any(check.last_error for check in pending) else "scan_pending"
+
+    results = [check.result for check in checks]
+    verdicts = [result.verdict for result in results]
+    if ScanResult.Verdict.MALICIOUS in verdicts:
+        risk = Risk.CRITICAL
+    elif ScanResult.Verdict.SUSPICIOUS in verdicts:
+        risk = Risk.HIGH
+    elif all(verdict == ScanResult.Verdict.CLEAN for verdict in verdicts):
+        risk = Risk.LOW
+    else:
+        risk = Risk.UNKNOWN
+    if ScanResult.Verdict.FAILED in verdicts:
+        _finish(request, ScanStatus.SCAN_FAILED, risk=risk, message="Не все антивирусы завершили проверку.")
+        _audit(request, "PROCESSING_FAILED", scan_result_ids=[result.pk for result in results])
+        return "failed"
     _finish(request, ScanStatus.SCAN_COMPLETED, risk=risk)
-    _audit(request, "SCAN_COMPLETED", scan_result_id=result.pk, verdict=result.verdict)
+    _audit(request, "SCAN_COMPLETED", scan_result_ids=[result.pk for result in results])
+    return "review_ready"
 
 
-def _record_failure(claimed, message="", *, retryable=False, scanner_file=None, download_failure=None):
+def _record_failure(claimed, message="", *, retryable=False, download_failure=None):
     try:
         with transaction.atomic():
             request = _locked_request(claimed)
@@ -193,12 +320,6 @@ def _record_failure(claimed, message="", *, retryable=False, scanner_file=None, 
                 source, exception = download_failure
                 failure = DownloadService.record_failure(source, exception)
                 message, retryable = failure.message, failure.retryable
-            if scanner_file is not None:
-                ScanResult.objects.create(
-                    request=request, file=scanner_file,
-                    provider=ScanResult.Provider.CLAMAV, verdict=ScanResult.Verdict.FAILED,
-                    normalized_result={"error": message},
-                )
             if retryable and request.processing_attempts < settings.PROCESS_MAX_ATTEMPTS:
                 delay = 15 * 2 ** (request.processing_attempts - 1)
                 request.processing_token = None

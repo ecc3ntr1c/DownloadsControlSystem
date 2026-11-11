@@ -15,7 +15,9 @@ def main():
     content = example.read_text(encoding="utf-8")
     content = content.replace(
         "DOWNLOADSCONTROL_SECRET_KEY=\n", f"DOWNLOADSCONTROL_SECRET_KEY={secrets.token_urlsafe(64)}\n",
-    ).replace("POSTGRES_PASSWORD=\n", f"POSTGRES_PASSWORD={secrets.token_urlsafe(32)}\n")
+    ).replace("POSTGRES_PASSWORD=\n", f"POSTGRES_PASSWORD={secrets.token_urlsafe(32)}\n").replace(
+        "ANTIVIRUS_ENCRYPTION_KEY=\n", f"ANTIVIRUS_ENCRYPTION_KEY={secrets.token_urlsafe(32)}=\n",
+    )
     if options.smoke:
         content = content.replace("POSTGRES_DB=software_control", "POSTGRES_DB=downloadscontrol_smoke")
         content = content.replace("PORTAL_PORT=8080", "PORTAL_PORT=18080")

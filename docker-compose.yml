@@ -21,6 +21,7 @@ x-app: &application
     POSTGRES_HOST: postgres
     REDIS_URL: redis://redis:6379/0
     CLAMD_HOST: clamav
+    ANTIVIRUS_ENCRYPTION_KEY: ${ANTIVIRUS_ENCRYPTION_KEY:-}
     FILE_STORAGE_ROOT: /var/lib/downloadscontrol
     STATIC_ROOT: /var/lib/downloadscontrol-static
     FILE_DELIVERY_ACCEL: "1"
@@ -115,8 +116,6 @@ services:
       setup:
         condition: service_completed_successfully
       redis:
-        condition: service_healthy
-      clamav:
         condition: service_healthy
     command: ["celery", "-A", "config", "worker", "--queues", "celery,downloads,maintenance", "--concurrency", "${WORKER_CONCURRENCY:-2}", "--loglevel", "INFO"]
     stop_grace_period: 15m
