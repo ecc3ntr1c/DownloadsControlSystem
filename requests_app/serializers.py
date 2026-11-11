@@ -1,7 +1,13 @@
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field
+
+from files_app.models import ProhibitedSoftwareMatch, StoredFile
+from files_app.services.delivery import download_link
+from scanning.models import ScanResult
 
 from .models import SoftwareRequest
-from .source_urls import parse_source_url
+from .review import approval_blockers, latest_scan
+from .source_urls import display_source_url, parse_source_url
 
 
 class RequestInputSerializer(serializers.ModelSerializer):
@@ -75,6 +81,20 @@ class SoftwareRequestDetailSerializer(serializers.ModelSerializer):
     """
 
     user = serializers.StringRelatedField()
+    source_url = serializers.SerializerMethodField()
+    download_url = serializers.SerializerMethodField()
+
+    @extend_schema_field(str)
+    def get_source_url(self, obj):
+        return display_source_url(obj.source_url)
+
+    @extend_schema_field(serializers.URLField(allow_null=True))
+    def get_download_url(self, obj):
+        request = self.context.get("request")
+        if request is None:
+            return None
+        link = download_link(obj, request.user)
+        return request.build_absolute_uri(link) if link else None
 
     class Meta:
         model = SoftwareRequest
@@ -93,6 +113,9 @@ class SoftwareRequestDetailSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
             "closed_at",
+            "processing_error",
+            "decided_at",
+            "download_url",
         )
         read_only_fields = fields
 
@@ -101,6 +124,7 @@ class SecurityRequestApproveSerializer(serializers.Serializer):
     security_comment = serializers.CharField(
         required=False,
         allow_blank=True,
+        max_length=2000,
     )
 
 
@@ -108,4 +132,52 @@ class SecurityRequestRejectSerializer(serializers.Serializer):
     security_comment = serializers.CharField(
         required=True,
         allow_blank=False,
+        max_length=2000,
     )
+
+
+class FileSummarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StoredFile
+        fields = ("id", "original_filename", "file_hash_sha256", "size_bytes", "mime_type", "storage_zone", "delete_after")
+
+
+class ScanSummarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ScanResult
+        fields = ("id", "provider", "verdict", "risk_level", "file_sha256", "normalized_result", "created_at")
+
+
+class ProhibitedMatchSerializer(serializers.ModelSerializer):
+    rule_name = serializers.CharField(source="rule.name")
+    reason = serializers.CharField(source="rule.reason")
+
+    class Meta:
+        model = ProhibitedSoftwareMatch
+        fields = ("rule_name", "reason", "matched_field", "is_overridden")
+
+
+class SecurityRequestDetailSerializer(SoftwareRequestDetailSerializer):
+    file = FileSummarySerializer(source="review_file", allow_null=True)
+    scan = serializers.SerializerMethodField()
+    prohibited_matches = ProhibitedMatchSerializer(many=True)
+    approval_blockers = serializers.SerializerMethodField()
+    decided_by = serializers.StringRelatedField()
+
+    @extend_schema_field(ScanSummarySerializer(allow_null=True))
+    def get_scan(self, obj):
+        result = latest_scan(obj)
+        return ScanSummarySerializer(result).data if result else None
+
+    @extend_schema_field(serializers.ListField(child=serializers.CharField()))
+    def get_approval_blockers(self, obj):
+        return approval_blockers(obj, obj.review_file, latest_scan(obj), obj.prohibited_matches.select_related("rule"))
+
+    class Meta(SoftwareRequestDetailSerializer.Meta):
+        fields = SoftwareRequestDetailSerializer.Meta.fields + (
+            "file", "scan", "prohibited_matches", "approval_blockers", "decided_by",
+        )
+
+
+class RequestReprocessSerializer(serializers.Serializer):
+    pass

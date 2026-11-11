@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Уведомления{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Уведомления</h1>
+  {% if unread %}
+    <form method="post" action="{% url 'notifications-read' %}">
+      {% csrf_token %}<button class="secondary" type="submit">Отметить все прочитанными</button>
+    </form>
+  {% endif %}
+</div>
+<ul class="notifications">
+  {% for notification in page_obj %}
+    <li>
+      <a href="{% url 'portal-request' notification.request_id %}">Заявка № {{ notification.request_id }}</a>
+      {% if not notification.read_at %}<span class="badge">Новое</span>{% endif %}
+      <p>{{ notification.get_event_display }}</p>
+      <time datetime="{{ notification.created_at|date:'c' }}">{{ notification.created_at|date:"d.m.Y H:i" }}</time>
+    </li>
+  {% empty %}
+    <li>Уведомлений пока нет.</li>
+  {% endfor %}
+</ul>
+{% include "pagination.html" %}
+{% endblock %}

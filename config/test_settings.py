@@ -14,3 +14,5 @@ CELERY_BROKER_URL = "memory://"
 CELERY_RESULT_BACKEND = "cache+memory://"
 _storage = TemporaryDirectory(prefix="downloadscontrol-tests-")
 FILE_STORAGE_ROOT = Path(_storage.name)
+FILE_DELIVERY_ACCEL = False
+TRUST_EDGE_IP = False

@@ -74,7 +74,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -126,9 +126,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "ru"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = os.getenv("TZ", "Europe/Moscow")
 
 USE_I18N = True
 
@@ -138,7 +138,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = "/static/"
+STATIC_ROOT = Path(os.getenv("STATIC_ROOT") or BASE_DIR / "staticfiles")
+STATICFILES_DIRS = [BASE_DIR / "static"]
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "portal-requests"
+LOGOUT_REDIRECT_URL = "login"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -186,6 +191,11 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": 15.0,
         "options": {"expires": 15, "queue": "maintenance"},
     },
+    "expire-stored-files": {
+        "task": "files_app.tasks.enforce_file_retention",
+        "schedule": 300.0,
+        "options": {"expires": 300, "queue": "maintenance"},
+    },
 }
 
 CLAMD_HOST = os.getenv("CLAMD_HOST", "localhost")
@@ -201,3 +211,5 @@ REJECTED_RETENTION_DAYS = int(os.getenv("REJECTED_RETENTION_DAYS", "7"))
 
 # Дополнительные директории
 FILE_STORAGE_ROOT = Path(os.getenv("FILE_STORAGE_ROOT") or BASE_DIR / "var")
+FILE_DELIVERY_ACCEL = os.getenv("FILE_DELIVERY_ACCEL", "0") == "1"
+TRUST_EDGE_IP = os.getenv("TRUST_EDGE_IP", "0") == "1"

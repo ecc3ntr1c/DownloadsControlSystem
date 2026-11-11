@@ -1,0 +1,7 @@
+{% if page_obj.has_other_pages %}
+<nav class="pager" aria-label="Страницы">
+  {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}&amp;status={{ status_value|default:''|urlencode }}">Назад</a>{% endif %}
+  <span>Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}&amp;status={{ status_value|default:''|urlencode }}">Далее</a>{% endif %}
+</nav>
+{% endif %}

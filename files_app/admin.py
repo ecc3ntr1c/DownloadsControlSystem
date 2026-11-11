@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from accounts.admin_base import ReadOnlyModelAdmin
+
 from .models import (
     FileSource,
     FileTypePolicy,
@@ -12,7 +14,7 @@ from .models import (
 
 
 @admin.register(FileSource)
-class FileSourceAdmin(admin.ModelAdmin):
+class FileSourceAdmin(ReadOnlyModelAdmin):
     list_display = (
         "id",
         "request",
@@ -41,7 +43,7 @@ class FileSourceAdmin(admin.ModelAdmin):
 
 
 @admin.register(StoredFile)
-class StoredFileAdmin(admin.ModelAdmin):
+class StoredFileAdmin(ReadOnlyModelAdmin):
     list_display = (
         "id",
         "request",
@@ -209,7 +211,7 @@ class ProhibitedSoftwareRuleAdmin(admin.ModelAdmin):
 
 
 @admin.register(ProhibitedSoftwareMatch)
-class ProhibitedSoftwareMatchAdmin(admin.ModelAdmin):
+class ProhibitedSoftwareMatchAdmin(ReadOnlyModelAdmin):
     list_display = (
         "id",
         "request",

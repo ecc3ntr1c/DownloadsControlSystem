@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Новая заявка{% endblock %}
+{% block content %}
+<section class="panel">
+  <h1>Новая заявка</h1>
+  <p>Укажи прямую ссылку HTTP или HTTPS и объясни, для чего нужно ПО.</p>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Подать заявку</button>
+  </form>
+</section>
+{% endblock %}

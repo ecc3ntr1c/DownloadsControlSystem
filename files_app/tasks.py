@@ -13,3 +13,12 @@ def download_file_source(source_id):
     if request_id is None:
         return "source_not_found"
     return process_request(request_id)
+
+
+@shared_task(soft_time_limit=60, time_limit=90)
+def enforce_file_retention():
+    from .services.retention import cleanup_expired_files, cleanup_stale_workspaces
+
+    removed = cleanup_expired_files()
+    cleanup_stale_workspaces()
+    return removed

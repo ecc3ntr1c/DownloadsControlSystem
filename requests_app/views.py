@@ -1,97 +1,44 @@
-from rest_framework import permissions, status
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from drf_spectacular.utils import extend_schema
+from rest_framework import status
+from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from .models import SoftwareRequest
-from .serializers import (
-    SoftwareRequestCreateSerializer,
-    SoftwareRequestDetailSerializer,
-)
+from .request_metadata import request_metadata
+from .serializers import SoftwareRequestCreateSerializer, SoftwareRequestDetailSerializer
 from .services import SoftwareRequestService
 
 
-def get_client_ip(request):
-    """
-    Получение IP клиента.
+class SoftwareRequestCreateAPIView(GenericAPIView):
+    serializer_class = SoftwareRequestCreateSerializer
 
-    Пока простая версия.
-    Позже можно доработать под reverse proxy / nginx.
-    """
-    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-
-    if x_forwarded_for:
-        return x_forwarded_for.split(",")[0].strip()
-
-    return request.META.get("REMOTE_ADDR")
-
-
-class SoftwareRequestCreateAPIView(APIView):
-    """
-    Создание заявки на проверку ПО.
-    """
-
-    permission_classes = [permissions.IsAuthenticated]
-
+    @extend_schema(responses={201: SoftwareRequestDetailSerializer})
     def post(self, request):
-        serializer = SoftwareRequestCreateSerializer(data=request.data)
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         software_request = SoftwareRequestService.create_request(
-            user=request.user,
-            validated_data=serializer.validated_data,
-            request_meta={
-                "ip_address": get_client_ip(request),
-                "user_agent": request.META.get("HTTP_USER_AGENT", ""),
-            },
+            user=request.user, validated_data=serializer.validated_data, request_meta=request_metadata(request),
         )
-
-        response_serializer = SoftwareRequestDetailSerializer(software_request)
-
-        return Response(
-            response_serializer.data,
-            status=status.HTTP_201_CREATED,
-        )
+        data = SoftwareRequestDetailSerializer(software_request, context=self.get_serializer_context()).data
+        return Response(data, status=status.HTTP_201_CREATED)
 
 
-class SoftwareRequestListAPIView(ListAPIView):
-    """
-    Список заявок текущего пользователя.
-
-    Сотруднику ИБ позже сделаем отдельный endpoint,
-    где будут видны все заявки.
-    """
-
+class OwnedRequestsMixin:
     serializer_class = SoftwareRequestDetailSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return SoftwareRequest.objects.filter(
-            user=self.request.user
-        ).order_by("-created_at")
+        if not self.request.user.is_authenticated:
+            return SoftwareRequest.objects.none()
+        return SoftwareRequest.objects.filter(user=self.request.user).select_related("review_file", "user")
 
 
-class SoftwareRequestDetailAPIView(RetrieveAPIView):
-    """
-    Карточка заявки.
-    """
-
-    serializer_class = SoftwareRequestDetailSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return SoftwareRequest.objects.filter(user=self.request.user)
+class SoftwareRequestListAPIView(OwnedRequestsMixin, ListAPIView):
+    pass
 
 
-class SoftwareRequestStatusAPIView(RetrieveAPIView):
-    """
-    Краткий статус заявки.
+class SoftwareRequestDetailAPIView(OwnedRequestsMixin, RetrieveAPIView):
+    pass
 
-    Пока используем тот же serializer, потом можно сделать отдельный короткий.
-    """
 
-    serializer_class = SoftwareRequestDetailSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        return SoftwareRequest.objects.filter(user=self.request.user)
+class SoftwareRequestStatusAPIView(SoftwareRequestDetailAPIView):
+    pass

@@ -1,123 +1,83 @@
+from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.generics import GenericAPIView, ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
-from accounts.permissions import (
-    CanApproveSoftwareRequest,
-    CanRejectSoftwareRequest,
-    CanViewSecurityRequests,
-)
+from accounts.permissions import CanApproveSoftwareRequest, CanRejectSoftwareRequest, CanViewSecurityRequests
+from files_app.services.storage import FileStorageError
+
 from .models import SoftwareRequest
+from .request_metadata import request_metadata
 from .serializers import (
+    RequestReprocessSerializer,
     SecurityRequestApproveSerializer,
+    SecurityRequestDetailSerializer,
     SecurityRequestRejectSerializer,
     SoftwareRequestDetailSerializer,
 )
 from .services import ApprovalService
-from .views import get_client_ip
+
+
+def filter_request_status(queryset, status_value):
+    if status_value in SoftwareRequest.RequestStatus.values:
+        return queryset.filter(request_status=status_value)
+    return queryset
 
 
 class SecurityRequestListAPIView(ListAPIView):
-    """
-    Список всех заявок для сотрудника ИБ.
-    """
-
     serializer_class = SoftwareRequestDetailSerializer
     permission_classes = [CanViewSecurityRequests]
 
     def get_queryset(self):
-        return SoftwareRequest.objects.all().order_by("-created_at")
+        return filter_request_status(
+            SoftwareRequest.objects.select_related("user", "review_file"),
+            self.request.query_params.get("status"),
+        )
 
 
 class SecurityRequestDetailAPIView(RetrieveAPIView):
-    """
-    Карточка любой заявки для сотрудника ИБ.
-    """
-
-    serializer_class = SoftwareRequestDetailSerializer
+    serializer_class = SecurityRequestDetailSerializer
     permission_classes = [CanViewSecurityRequests]
-
-    def get_queryset(self):
-        return SoftwareRequest.objects.all()
+    queryset = SoftwareRequest.objects.select_related("user", "review_file", "decided_by")
 
 
-class SecurityRequestApproveAPIView(APIView):
-    """
-    Согласование заявки сотрудником ИБ.
-    """
+class SecurityRequestActionAPIView(GenericAPIView):
+    @extend_schema(responses={200: SoftwareRequestDetailSerializer})
+    def post(self, request, pk):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        software_request = get_object_or_404(SoftwareRequest, pk=pk)
+        try:
+            software_request = self.decision_service(
+                software_request=software_request, security_user=request.user,
+                request_meta=request_metadata(request), **serializer.validated_data,
+            )
+        except ValueError as exc:
+            return Response({"detail": str(exc)}, status=status.HTTP_409_CONFLICT)
+        except FileStorageError:
+            return Response(
+                {"detail": "Не удалось разместить проверенный файл на внутреннем сервере."},
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+            )
+        return Response(SoftwareRequestDetailSerializer(
+            software_request, context=self.get_serializer_context(),
+        ).data)
 
+
+class SecurityRequestApproveAPIView(SecurityRequestActionAPIView):
     permission_classes = [CanApproveSoftwareRequest]
-
-    def post(self, request, pk):
-        serializer = SecurityRequestApproveSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        try:
-            software_request = SoftwareRequest.objects.get(id=pk)
-        except SoftwareRequest.DoesNotExist:
-            return Response(
-                {"detail": "Заявка не найдена."},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
-        try:
-            software_request = ApprovalService.approve_request(
-                software_request=software_request,
-                security_user=request.user,
-                security_comment=serializer.validated_data.get(
-                    "security_comment",
-                    "",
-                ),
-                request_meta={
-                    "ip_address": get_client_ip(request),
-                    "user_agent": request.META.get("HTTP_USER_AGENT", ""),
-                },
-            )
-        except ValueError as error:
-            return Response(
-                {"detail": str(error)},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        response_serializer = SoftwareRequestDetailSerializer(software_request)
-        return Response(response_serializer.data, status=status.HTTP_200_OK)
+    serializer_class = SecurityRequestApproveSerializer
+    decision_service = staticmethod(ApprovalService.approve_request)
 
 
-class SecurityRequestRejectAPIView(APIView):
-    """
-    Отказ по заявке сотрудником ИБ.
-    """
-
+class SecurityRequestRejectAPIView(SecurityRequestActionAPIView):
     permission_classes = [CanRejectSoftwareRequest]
+    serializer_class = SecurityRequestRejectSerializer
+    decision_service = staticmethod(ApprovalService.reject_request)
 
-    def post(self, request, pk):
-        serializer = SecurityRequestRejectSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
 
-        try:
-            software_request = SoftwareRequest.objects.get(id=pk)
-        except SoftwareRequest.DoesNotExist:
-            return Response(
-                {"detail": "Заявка не найдена."},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
-        try:
-            software_request = ApprovalService.reject_request(
-                software_request=software_request,
-                security_user=request.user,
-                security_comment=serializer.validated_data["security_comment"],
-                request_meta={
-                    "ip_address": get_client_ip(request),
-                    "user_agent": request.META.get("HTTP_USER_AGENT", ""),
-                },
-            )
-        except ValueError as error:
-            return Response(
-                {"detail": str(error)},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        response_serializer = SoftwareRequestDetailSerializer(software_request)
-        return Response(response_serializer.data, status=status.HTTP_200_OK)
+class SecurityRequestReprocessAPIView(SecurityRequestActionAPIView):
+    permission_classes = [CanApproveSoftwareRequest]
+    serializer_class = RequestReprocessSerializer
+    decision_service = staticmethod(ApprovalService.reprocess_request)

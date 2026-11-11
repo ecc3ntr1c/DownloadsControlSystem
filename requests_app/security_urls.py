@@ -4,7 +4,8 @@ from .security_views import (
     SecurityRequestListAPIView,
     SecurityRequestDetailAPIView,
     SecurityRequestApproveAPIView,
-    SecurityRequestRejectAPIView
+    SecurityRequestRejectAPIView,
+    SecurityRequestReprocessAPIView,
 )
 
 urlpatterns = [
@@ -12,4 +13,5 @@ urlpatterns = [
     path("<int:pk>/", SecurityRequestDetailAPIView.as_view(), name="security-request-detail"),
     path("<int:pk>/approve/", SecurityRequestApproveAPIView.as_view(), name="security-request-approve"),
     path("<int:pk>/reject/", SecurityRequestRejectAPIView.as_view(), name="security-request-reject"),
+    path("<int:pk>/reprocess/", SecurityRequestReprocessAPIView.as_view(), name="security-request-reprocess"),
 ]

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{% if security %}Очередь ИБ{% else %}Мои заявки{% endif %}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>{% if security %}Очередь ИБ{% else %}Мои заявки{% endif %}</h1>
+  {% if not security %}<a class="button" href="{% url 'portal-create' %}">Новая заявка</a>{% endif %}
+</div>
+<form class="filters" method="get">
+  <label for="status">Статус заявки</label>
+  <select id="status" name="status">
+    <option value="">Все</option>
+    {% for value, label in status_choices %}
+      <option value="{{ value }}"{% if value == status_value %} selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+  <button class="secondary" type="submit">Показать</button>
+</form>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th scope="col">Заявка</th>{% if security %}<th scope="col">Автор</th>{% endif %}<th scope="col">Статус</th><th scope="col">Обработка</th><th scope="col">Создана</th></tr></thead>
+    <tbody>
+    {% for item in page_obj %}
+      <tr>
+        <td>
+          <a href="{% if security %}{% url 'portal-security-request' item.pk %}{% else %}{% url 'portal-request' item.pk %}{% endif %}">№ {{ item.pk }}</a>
+          <span class="description">{{ item.description|truncatechars:100 }}</span>
+        </td>
+        {% if security %}<td>{{ item.user.get_username }}</td>{% endif %}
+        <td>{{ item.get_request_status_display }}</td>
+        <td>{{ item.get_scan_status_display }}</td>
+        <td><time datetime="{{ item.created_at|date:'c' }}">{{ item.created_at|date:"d.m.Y H:i" }}</time></td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="{% if security %}5{% else %}4{% endif %}">Заявок с таким фильтром пока нет.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% include "pagination.html" %}
+{% endblock %}

@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Заявки на ПО{% endblock %} · DownloadsControl</title>
+  <link rel="stylesheet" href="{% static 'downloadscontrol/portal.css' %}">
+</head>
+<body>
+  <header class="topbar">
+    <div class="layout topbar-inner">
+      <a class="brand" href="{% url 'portal-requests' %}">DownloadsControl</a>
+      {% if user.is_authenticated %}
+        <nav aria-label="Разделы">
+          <a href="{% url 'portal-requests' %}">Мои заявки</a>
+          {% if perms.requests_app.view_security_requests %}<a href="{% url 'portal-security' %}">Очередь ИБ</a>{% endif %}
+          <a href="{% url 'notification-inbox' %}">Уведомления</a>
+          {% if user.is_staff %}<a href="{% url 'admin:index' %}">Администрирование</a>{% endif %}
+        </nav>
+        <form class="session" method="post" action="{% url 'logout' %}">
+          {% csrf_token %}<span>{{ user.get_username }}</span><button class="secondary" type="submit">Выйти</button>
+        </form>
+      {% endif %}
+    </div>
+  </header>
+  <main class="layout">
+    {% for message in messages %}<p class="notice" role="status">{{ message }}</p>{% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

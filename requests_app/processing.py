@@ -19,6 +19,8 @@ from files_app.services.review_policies import (
     find_prohibited_matches,
     prevents_release,
 )
+from notifications.models import Notification
+from notifications.services import notify_request_owner
 from scanning.clamav import ClamAVScanner, ScannerError
 from scanning.models import ScanResult
 
@@ -233,6 +235,7 @@ def _finish(request, status, *, risk=Risk.UNKNOWN, message=""):
         "scan_status", "request_status", "processing_due_at", "processing_token",
         "processing_error", "risk_level", "updated_at",
     ])
+    notify_request_owner(request, Notification.Event.REVIEW_READY)
 
 
 def _audit(request, action, **details):

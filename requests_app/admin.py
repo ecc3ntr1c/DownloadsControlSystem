@@ -1,10 +1,12 @@
 from django.contrib import admin
 
+from accounts.admin_base import ReadOnlyModelAdmin
+
 from .models import SoftwareRequest
 
 
 @admin.register(SoftwareRequest)
-class SoftwareRequestAdmin(admin.ModelAdmin):
+class SoftwareRequestAdmin(ReadOnlyModelAdmin):
     list_display = (
         "id",
         "user",

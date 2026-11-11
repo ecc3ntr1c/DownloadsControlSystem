@@ -312,6 +312,7 @@ class StoredFile(models.Model):
     delete_after = models.DateTimeField(
         null=True,
         blank=True,
+        db_index=True,
         verbose_name="Удалить после",
     )
 
@@ -347,6 +348,7 @@ class FileTypePolicy(models.Model):
     extension = models.CharField(
         max_length=32,
         db_index=True,
+        blank=True,
         verbose_name="Расширение",
     )
 

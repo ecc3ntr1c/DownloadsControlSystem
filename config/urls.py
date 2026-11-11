@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth import views as auth_views
 from django.urls import include, path
 
 from drf_spectacular.views import (
@@ -22,7 +23,22 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
+from files_app.views import download_approved_file
+from notifications import views as notifications
+from requests_app import web
+
 urlpatterns = [
+    path("", web.my_requests, name="portal-requests"),
+    path("login/", auth_views.LoginView.as_view(), name="login"),
+    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path("requests/new/", web.create_request, name="portal-create"),
+    path("requests/<int:pk>/", web.request_detail, name="portal-request"),
+    path("security/", web.security_requests, name="portal-security"),
+    path("security/<int:pk>/", web.security_detail, name="portal-security-request"),
+    path("security/<int:pk>/<str:action>/", web.security_action, name="portal-security-action"),
+    path("notifications/", notifications.inbox, name="notification-inbox"),
+    path("notifications/read/", notifications.mark_all_read, name="notifications-read"),
+    path("downloads/<int:pk>/", download_approved_file, name="approved-file-download"),
     path("admin/", admin.site.urls),
     path("api-auth/", include("rest_framework.urls")),
 

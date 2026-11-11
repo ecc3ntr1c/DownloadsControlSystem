@@ -1,10 +1,12 @@
 from django.contrib import admin
 
+from accounts.admin_base import ReadOnlyModelAdmin
+
 from .models import ScanResult
 
 
 @admin.register(ScanResult)
-class ScanResultAdmin(admin.ModelAdmin):
+class ScanResultAdmin(ReadOnlyModelAdmin):
     list_display = (
         "id",
         "request",

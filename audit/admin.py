@@ -1,10 +1,12 @@
 from django.contrib import admin
 
+from accounts.admin_base import ReadOnlyModelAdmin
+
 from .models import AuditLog
 
 
 @admin.register(AuditLog)
-class AuditLogAdmin(admin.ModelAdmin):
+class AuditLogAdmin(ReadOnlyModelAdmin):
     list_display = (
         "id",
         "actor",

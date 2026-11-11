@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Заявка № {{ item.pk }}{% endblock %}
+{% block content %}
+<a href="{% if security %}{% url 'portal-security' %}{% else %}{% url 'portal-requests' %}{% endif %}">← К списку заявок</a>
+<div class="page-head">
+  <h1>Заявка № {{ item.pk }}</h1>
+  {% if pending %}<a class="button secondary" href="">Обновить статус</a>{% endif %}
+</div>
+<div class="columns">
+  <section class="panel">
+    <h2>Сведения о заявке</h2>
+    <dl>
+      {% if security %}<dt>Автор</dt><dd>{{ item.user.get_username }}</dd>{% endif %}
+      <dt>Описание ПО</dt><dd>{{ item.description|linebreaksbr }}</dd>
+      <dt>Обоснование</dt><dd>{{ item.business_reason|linebreaksbr }}</dd>
+      <dt>Источник</dt><dd><code>{{ source_display|default:"—" }}</code></dd>
+      <dt>Дата подачи</dt><dd>{{ item.created_at|date:"d.m.Y H:i" }}</dd>
+    </dl>
+  </section>
+  <section class="panel">
+    <h2>Состояние</h2>
+    <dl>
+      <dt>Заявка</dt><dd>{{ item.get_request_status_display }}</dd>
+      <dt>Автоматическая обработка</dt><dd>{{ item.get_scan_status_display }}</dd>
+      {% if item.processing_error %}<dt>Результат обработки</dt><dd>{{ item.processing_error }}</dd>{% endif %}
+      {% if item.decided_at %}<dt>Решение ИБ</dt><dd>{{ item.decided_at|date:"d.m.Y H:i" }}{% if security and item.decided_by %} · {{ item.decided_by.get_username }}{% endif %}</dd>{% endif %}
+      {% if item.security_comment %}<dt>Комментарий ИБ</dt><dd>{{ item.security_comment|linebreaksbr }}</dd>{% endif %}
+    </dl>
+    {% if download_url %}
+      <a class="button" href="{{ download_url }}">Скачать файл</a>
+      <p class="muted">Доступен до {{ file.delete_after|date:"d.m.Y H:i" }}</p>
+    {% endif %}
+  </section>
+</div>
+{% if security %}
+  <section class="panel">
+    <h2>Результаты проверки</h2>
+    {% if file %}
+      <dl>
+        <dt>Файл</dt><dd>{{ file.original_filename }} · {{ file.size_bytes|filesizeformat }}</dd>
+        <dt>Тип</dt><dd>{{ file.mime_type|default:"Не определён" }}</dd>
+        <dt>SHA-256</dt><dd><code>{{ file.file_hash_sha256 }}</code></dd>
+        <dt>Хранилище</dt><dd>{{ file.get_storage_zone_display }}</dd>
+      </dl>
+    {% endif %}
+    {% if scan %}
+      <p><strong>{{ scan.get_provider_display }} · {{ scan.get_verdict_display }}</strong></p>
+      {% if scan.normalized_result.signature %}<p>Сигнатура: <code>{{ scan.normalized_result.signature }}</code></p>{% endif %}
+      {% if scan.normalized_result.error %}<p>{{ scan.normalized_result.error }}</p>{% endif %}
+    {% else %}
+      <p>Результат антивирусной проверки пока отсутствует.</p>
+    {% endif %}
+    {% if matches %}
+      <h3>Совпадения с реестром запрещённого ПО</h3>
+      <ul>{% for match in matches %}<li>{{ match.rule.name }}. {{ match.rule.reason }}{% if match.is_overridden %} · ИБ согласовала исключение{% endif %}</li>{% endfor %}</ul>
+    {% endif %}
+  </section>
+  {% if can_decide or can_retry %}
+    <section class="panel">
+      <h2>Действия ИБ</h2>
+      {% if can_decide and blockers %}<ul class="errors">{% for reason in blockers %}<li>{{ reason }}</li>{% endfor %}</ul>{% endif %}
+      <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% if can_decide %}
+          {{ form.security_comment.as_field_group }}
+          <div class="actions">
+            {% if perms.requests_app.approve_software_request and not blockers %}<button formaction="{% url 'portal-security-action' item.pk 'approve' %}" type="submit">Разрешить выдачу</button>{% endif %}
+            {% if perms.requests_app.reject_software_request %}<button class="danger" formaction="{% url 'portal-security-action' item.pk 'reject' %}" type="submit">Отказать</button>{% endif %}
+          </div>
+          <p class="muted">Комментарий обязателен при отказе или согласовании исключения.</p>
+        {% endif %}
+        {% if can_retry and perms.requests_app.approve_software_request %}
+          <button class="secondary" formaction="{% url 'portal-security-action' item.pk 'reprocess' %}" type="submit">Повторить обработку</button>
+        {% endif %}
+      </form>
+    </section>
+  {% endif %}
+{% endif %}
+{% endblock %}
