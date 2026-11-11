@@ -377,6 +377,26 @@ offline = ["drf-spectacular-sidecar"]
 sidecar = ["drf-spectacular-sidecar"]
 
 [[package]]
+name = "gunicorn"
+version = "27.0.0"
+description = "WSGI HTTP Server for UNIX"
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "gunicorn-27.0.0-py3-none-any.whl", hash = "sha256:1380f2f520abc3beb9e72cd2e728bd2d08a19b3ff6ac03ebd8da71d1798a4008"},
+    {file = "gunicorn-27.0.0.tar.gz", hash = "sha256:88d52e7c60b3af07bc8db431fbb450a94780f2cbe7c420c7cf1891392661c591"},
+]
+
+[package.extras]
+fast = ["gunicorn_h1c (>=0.6.14)"]
+gevent = ["gevent (>=24.10.1)", "packaging"]
+http2 = ["h2 (>=4.4.1)"]
+setproctitle = ["setproctitle"]
+testing = ["coverage", "gevent (>=24.10.1)", "h2 (>=4.4.1)", "httpx[http2] (>=0.23.0)", "inotify (>=0.2.10) ; sys_platform == \"linux\"", "packaging", "pytest (>=9.0.3)", "pytest-asyncio", "pytest-cov", "uvloop (>=0.19.0) ; platform_python_implementation != \"PyPy\""]
+tornado = ["tornado (>=6.5.7)"]
+
+[[package]]
 name = "h11"
 version = "0.16.0"
 description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
@@ -1061,4 +1081,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.14"
-content-hash = "3f19019df1e5066be946bb1e39944bfa1f802f5d80bf8587aa1b07ee32ad9fdb"
+content-hash = "4dcc4df72e3147c325e537b1d5966d32e458964862ea664e55b473bd9283be45"

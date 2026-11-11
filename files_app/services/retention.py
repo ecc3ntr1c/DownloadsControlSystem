@@ -87,6 +87,9 @@ def cleanup_stale_workspaces():
         except OSError:
             logger.warning("Не удалось удалить устаревший временный каталог.")
     for zone in ACTIVE_ZONES:
+        for path in storage.stale_unregistered_files(zone, cutoff):
+            if not StoredFile.objects.filter(stored_filename=path.name).exists():
+                storage.remove_quietly(path)
         for path in storage.get_zone_dir(zone).glob(".storage-*.part"):
             try:
                 if path.lstat().st_mtime < cutoff:

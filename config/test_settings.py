@@ -3,9 +3,12 @@ from tempfile import TemporaryDirectory
 from pathlib import Path
 
 os.environ["LOAD_PROJECT_DOTENV"] = "0"
+os.environ["REQUIRE_SECURE_SETTINGS"] = "0"
+os.environ["PORTAL_SCHEME"] = "http"
 from .settings import *  # noqa: E402, F403
 
 SECRET_KEY = "test-key-only-used-for-tests"
+ALLOWED_HOSTS = ["testserver", "localhost", "127.0.0.1"]
 if os.getenv("TEST_POSTGRES") != "1":
     DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]

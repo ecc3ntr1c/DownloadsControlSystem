@@ -30,7 +30,7 @@ class FileStorageService:
         StoredFile.StorageZone.REJECTED: "rejected",
         StoredFile.StorageZone.DELETED: "deleted",
     }
-    _FILE_NAME = re.compile(r"[0-9a-f]{32}(?:\.[a-z0-9]{1,12})?")
+    _FILE_NAME = re.compile(r"(?:dc-)?[0-9a-f]{32}(?:\.[a-z0-9]{1,12})?")
 
     def __init__(self):
         self.root_dir = Path(settings.FILE_STORAGE_ROOT).expanduser().resolve()
@@ -63,6 +63,8 @@ class FileStorageService:
         directories = [self.staging_dir, *(self.get_zone_dir(zone) for zone in self._ZONE_NAMES)]
         if not all(path.is_dir() for path in directories):
             raise FileStorageError("Не созданы каталоги файлового хранилища.")
+        if not all(os.access(path, os.W_OK | os.X_OK) for path in directories):
+            raise FileStorageError("Нет доступа на запись в каталоги файлового хранилища.")
 
     def download_workspace(self):
         self.ensure_structure()
@@ -114,7 +116,7 @@ class FileStorageService:
             raise FileStorageError("Файл можно опубликовать только после проверки.")
         suffix = extension.strip().lower().lstrip(".")
         suffix = f".{suffix}" if re.fullmatch(r"[a-z0-9]{1,12}", suffix) else ""
-        destination = self.zone_path(zone, f"{uuid.uuid4().hex}{suffix}")
+        destination = self.zone_path(zone, f"dc-{uuid.uuid4().hex}{suffix}")
         try:
             try:
                 os.replace(source, destination)
@@ -176,3 +178,15 @@ class FileStorageService:
             Path(path).unlink(missing_ok=True)
         except OSError:
             logger.warning("Не удалось убрать временную или заменённую копию файла.")
+
+    def stale_unregistered_files(self, zone, cutoff):
+        """Файлы новой версии, оставшиеся между переносом и записью в БД."""
+        for path in self.get_zone_dir(zone).glob("dc-*"):
+            try:
+                if (
+                    self._FILE_NAME.fullmatch(path.name) and not path.is_symlink()
+                    and path.is_file() and path.stat().st_mtime < cutoff
+                ):
+                    yield path
+            except FileNotFoundError:
+                continue

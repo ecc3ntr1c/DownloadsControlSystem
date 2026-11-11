@@ -1,0 +1,16 @@
+.git
+.idea
+.vscode
+.env
+.env.*
+.venv
+venv
+**/__pycache__
+**/*.pyc
+*.sqlite3
+*.log
+staticfiles
+storage
+secure_storage
+var
+celerybeat-schedule*

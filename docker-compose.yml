@@ -1,23 +1,173 @@
+name: downloadscontrol-v1
+
+x-app: &application
+  build: .
+  image: downloadscontrol:${DOWNLOADSCONTROL_IMAGE_TAG:-local}
+  init: true
+  read_only: true
+  tmpfs:
+    - /tmp:rw,nosuid,nodev,size=128m
+  environment:
+    LOAD_PROJECT_DOTENV: "0"
+    REQUIRE_SECURE_SETTINGS: "1"
+    SECRET_KEY: ${DOWNLOADSCONTROL_SECRET_KEY:?set DOWNLOADSCONTROL_SECRET_KEY in .env.compose}
+    ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
+    CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS:-}
+    PORTAL_SCHEME: ${PORTAL_SCHEME:-http}
+    TRUST_EDGE_IP: "1"
+    POSTGRES_DB: ${POSTGRES_DB:-software_control}
+    POSTGRES_USER: ${POSTGRES_USER:-software_control}
+    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env.compose}
+    POSTGRES_HOST: postgres
+    REDIS_URL: redis://redis:6379/0
+    CLAMD_HOST: clamav
+    FILE_STORAGE_ROOT: /var/lib/downloadscontrol
+    STATIC_ROOT: /var/lib/downloadscontrol-static
+    FILE_DELIVERY_ACCEL: "1"
+    QUARANTINE_RETENTION_DAYS: ${QUARANTINE_RETENTION_DAYS:-14}
+    APPROVED_RETENTION_DAYS: ${APPROVED_RETENTION_DAYS:-30}
+    REJECTED_RETENTION_DAYS: ${REJECTED_RETENTION_DAYS:-7}
+  volumes:
+    - file_data:/var/lib/downloadscontrol
+  networks: [backend]
+
 services:
   postgres:
     image: postgres:16
-    container_name: software_control_postgres
-    #restart: unless-stopped
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: software_control
-      POSTGRES_USER: software_control
-      POSTGRES_PASSWORD: software_control
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: ${POSTGRES_DB:-software_control}
+      POSTGRES_USER: ${POSTGRES_USER:-software_control}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env.compose}
     volumes:
       - software_control_postgres_data:/var/lib/postgresql/data
+    networks: [backend]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   redis:
     image: redis:7
-    container_name: software_control_redis
-    #restart: unless-stopped
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    networks: [backend]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  clamav:
+    image: clamav/clamav-debian:1.4
+    restart: unless-stopped
+    volumes:
+      - clamav_data:/var/lib/clamav
+      - ./deploy/clamd.conf:/etc/clamav/clamd.conf:ro
+    networks: [antivirus, updates]
+    healthcheck:
+      test: ["CMD", "clamdscan", "--ping=1"]
+      interval: 15s
+      timeout: 5s
+      retries: 15
+      start_period: 60s
+
+  setup:
+    <<: *application
+    volumes:
+      - file_data:/var/lib/downloadscontrol
+      - static_data:/var/lib/downloadscontrol-static
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command:
+      - sh
+      - -ec
+      - |
+        python manage.py migrate --noinput
+        python manage.py init_roles
+        python manage.py init_storage
+        python manage.py collectstatic --noinput
+
+  app:
+    <<: *application
+    restart: unless-stopped
+    networks: [backend, edge]
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "from urllib.request import urlopen; urlopen('http://127.0.0.1:8000/readyz/', timeout=4).read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  worker:
+    <<: *application
+    restart: unless-stopped
+    networks: [backend, antivirus, download_egress]
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+      clamav:
+        condition: service_healthy
+    command: ["celery", "-A", "config", "worker", "--queues", "celery,downloads,maintenance", "--concurrency", "${WORKER_CONCURRENCY:-2}", "--loglevel", "INFO"]
+    stop_grace_period: 15m
+
+  scheduler:
+    <<: *application
+    restart: unless-stopped
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    command: ["celery", "-A", "config", "beat", "--schedule", "/tmp/downloadscontrol-beat", "--loglevel", "INFO"]
+    volumes: []
+
+  nginx:
+    image: nginx:1.28-alpine
+    restart: unless-stopped
+    environment:
+      PORTAL_SCHEME: ${PORTAL_SCHEME:-http}
+      NGINX_ENVSUBST_FILTER: ^PORTAL_SCHEME$
     ports:
-      - "6379:6379"
+      - "${PORTAL_BIND:-127.0.0.1}:${PORTAL_PORT:-8080}:8080"
+    depends_on:
+      app:
+        condition: service_healthy
+        restart: true
+    volumes:
+      - ./deploy/nginx.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - type: volume
+        source: file_data
+        target: /srv/files/approved
+        read_only: true
+        volume:
+          nocopy: true
+          subpath: approved
+      - static_data:/srv/static:ro
+    networks: [edge]
+
+networks:
+  backend:
+    internal: true
+  antivirus:
+    internal: true
+  edge:
+  updates:
+  download_egress:
 
 volumes:
   software_control_postgres_data:
+  redis_data:
+  clamav_data:
+  file_data:
+  static_data:

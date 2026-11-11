@@ -122,7 +122,6 @@ class WorkflowTests(TestCase):
         response = browser.get(link)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(b"".join(response.streaming_content), b"Benign installation package fixture")
-        response.close()
         self.assertIn("attachment", response.headers["Content-Disposition"])
         self.assertEqual(response.headers["Cache-Control"], "private, no-store")
         self.assertEqual(AuditLog.objects.get(action="FILE_DOWNLOAD_AUTHORIZED").actor_id, self.owner.pk)

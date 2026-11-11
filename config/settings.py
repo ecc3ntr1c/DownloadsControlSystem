@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
+
+from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,10 +27,22 @@ if os.getenv("LOAD_PROJECT_DOTENV", "1") == "1":
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-dev-key")
+if os.getenv("REQUIRE_SECURE_SETTINGS") == "1" and len(SECRET_KEY) < 50:
+    raise ImproperlyConfigured("Задайте отдельный SECRET_KEY длиной не менее 50 символов.")
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = os.getenv("DEBUG", "0").lower() in {"1", "true"}
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [value.strip() for value in os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",") if value.strip()]
+CSRF_TRUSTED_ORIGINS = [value.strip() for value in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",") if value.strip()]
+if os.getenv("PORTAL_SCHEME", "http") == "https":
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = True
+    SECURE_REDIRECT_EXEMPT = [r"^(healthz|readyz)/$"]
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+SECURE_REFERRER_POLICY = "same-origin"
+DATA_UPLOAD_MAX_MEMORY_SIZE = 128 * 1024
 
 
 # Application definition
@@ -100,6 +114,7 @@ DATABASES = {
         "PASSWORD": os.getenv("POSTGRES_PASSWORD", "software_control"),
         "HOST": os.getenv("POSTGRES_HOST", "localhost"),
         "PORT": os.getenv("POSTGRES_PORT", "5432"),
+        "OPTIONS": {"connect_timeout": 3},
     }
 }
 
@@ -207,6 +222,8 @@ PROCESS_LEASE_SECONDS = 900
 QUARANTINE_RETENTION_DAYS = int(os.getenv("QUARANTINE_RETENTION_DAYS", "14"))
 APPROVED_RETENTION_DAYS = int(os.getenv("APPROVED_RETENTION_DAYS", "30"))
 REJECTED_RETENTION_DAYS = int(os.getenv("REJECTED_RETENTION_DAYS", "7"))
+if min(QUARANTINE_RETENTION_DAYS, APPROVED_RETENTION_DAYS, REJECTED_RETENTION_DAYS) < 1:
+    raise ImproperlyConfigured("Срок хранения каждой зоны должен составлять хотя бы один день.")
 
 
 # Дополнительные директории

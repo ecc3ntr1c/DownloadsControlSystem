@@ -1,3 +1,6 @@
+import re
+
+from django import forms
 from django.contrib import admin
 
 from accounts.admin_base import ReadOnlyModelAdmin
@@ -103,14 +106,13 @@ class FileTypePolicyAdmin(admin.ModelAdmin):
 
 @admin.register(DownloadsPolicy)
 class DownloadPolicyAdmin(admin.ModelAdmin):
+    exclude = ("allow_file_scheme", "allow_url_credentials", "allowed_file_hosts", "blocked_file_hosts", "allowed_file_base_paths")
     list_display = (
         "id",
         "name",
         "is_active",
         "allow_http",
         "allow_https",
-        "allow_file_scheme",
-        "allow_url_credentials",
         "allow_private_networks",
         "max_file_size_mb",
         "max_redirects",
@@ -120,8 +122,6 @@ class DownloadPolicyAdmin(admin.ModelAdmin):
         "is_active",
         "allow_http",
         "allow_https",
-        "allow_file_scheme",
-        "allow_url_credentials",
         "allow_private_networks",
     )
 
@@ -177,8 +177,21 @@ class ProtectedDownloadRuleAdmin(admin.ModelAdmin):
         return request.user.is_superuser
 
 
+class ProhibitedRuleForm(forms.ModelForm):
+    def clean(self):
+        data = super().clean()
+        pattern = data.get("pattern", "")
+        if pattern and data.get("match_type") == ProhibitedSoftwareRule.MatchType.REGEX:
+            try:
+                re.compile(pattern)
+            except re.error:
+                self.add_error("pattern", "Проверьте синтаксис регулярного выражения.")
+        return data
+
+
 @admin.register(ProhibitedSoftwareRule)
 class ProhibitedSoftwareRuleAdmin(admin.ModelAdmin):
+    form = ProhibitedRuleForm
     list_display = (
         "id",
         "name",

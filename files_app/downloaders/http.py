@@ -994,15 +994,15 @@ class HttpDownloader(BaseDownloader):
             suffix = Path(
                 filename
             ).suffix
+            if len(suffix) > 13:
+                suffix = ""
 
             max_stem_length = (
                 self.MAX_FILENAME_LENGTH
                 - len(suffix)
             )
 
-            stem = Path(
-                filename
-            ).stem[:max_stem_length]
+            stem = filename.removesuffix(suffix)[:max_stem_length] if suffix else filename[:max_stem_length]
 
             filename = (
                 f"{stem}{suffix}"

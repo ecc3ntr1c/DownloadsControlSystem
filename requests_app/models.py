@@ -9,7 +9,7 @@ class SoftwareRequest(models.Model):
 
     class RequestStatus(models.TextChoices):
         CREATED = "CREATED", "Создана"
-        UNDER_SECURITY_REVIEW = "UNDER_SECURITY_REVIEW", "На рассмотрении ИБ"
+        UNDER_SECURITY_REVIEW = "UNDER_SECURITY_REVIEW", "На автоматической обработке"
         PROHIBITED_SOFTWARE_REVIEW = (
             "PROHIBITED_SOFTWARE_REVIEW",
             "В списке запрещённого ПО",

@@ -1,0 +1,17 @@
+# Только для одноразового проекта Compose с отдельными томами.
+services:
+  app:
+    environment:
+      DOWNLOADSCONTROL_SMOKE: "1"
+  nginx:
+    networks:
+      edge:
+        aliases: [portal.test]
+  fixture:
+    image: python:3.14-slim-bookworm
+    command: ["python", "-m", "http.server", "8000", "--directory", "/fixture"]
+    volumes:
+      - ./deploy/fixtures:/fixture:ro
+    networks:
+      download_egress:
+        aliases: [fixture.test]

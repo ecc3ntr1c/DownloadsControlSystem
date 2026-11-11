@@ -27,7 +27,11 @@ from files_app.views import download_approved_file
 from notifications import views as notifications
 from requests_app import web
 
+from .health import health, readiness
+
 urlpatterns = [
+    path("healthz/", health, name="health"),
+    path("readyz/", readiness, name="readiness"),
     path("", web.my_requests, name="portal-requests"),
     path("login/", auth_views.LoginView.as_view(), name="login"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
