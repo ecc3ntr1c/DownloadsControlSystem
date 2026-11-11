@@ -1,3 +1,5 @@
+import json
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import PermissionDenied
@@ -17,7 +19,7 @@ from files_app.services.storage import FileStorageError
 from .forms import DecisionForm, RequestForm
 from .models import SoftwareRequest
 from .request_metadata import request_metadata
-from .review import approval_blockers, can_reprocess, decision_ready, latest_scan
+from .review import approval_blockers, can_reprocess, decision_ready, latest_scan, scan_reports
 from .security_views import filter_request_status
 from .services import ApprovalService, SoftwareRequestService
 from .source_urls import display_source_url
@@ -88,11 +90,31 @@ def _render_detail(request, item, *, security=False, form=None, status=200):
         scan = latest_scan(item)
         matches = list(item.prohibited_matches.select_related("rule"))
         context.update(
-            scan=scan, matches=matches, blockers=approval_blockers(item, item.review_file, scan, matches),
+            reports=_portal_scan_reports(item), matches=matches, blockers=approval_blockers(item, item.review_file, scan, matches),
             can_decide=decision_ready(item), can_retry=can_reprocess(item),
             form=form if form is not None else DecisionForm(),
         )
     return render(request, "requests_app/detail.html", context, status=status)
+
+
+def _portal_scan_reports(item):
+    reports = scan_reports(item)
+    for report in reports:
+        if report["result"] is None:
+            continue
+        raw = report["result"].raw_result
+        if not isinstance(raw, dict):
+            continue
+        engines = raw.get("results")
+        if isinstance(engines, dict):
+            report["engines"] = [
+                {"name": engine.get("engine_name") or name, "category": engine.get("category"),
+                 "result": engine.get("result"), "version": engine.get("engine_version")}
+                for name, engine in engines.items() if isinstance(engine, dict)
+            ]
+        if raw.get("details"):
+            report["details_json"] = json.dumps(raw["details"], indent=2, ensure_ascii=True)
+    return reports
 
 
 @login_required

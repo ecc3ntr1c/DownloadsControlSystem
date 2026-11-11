@@ -6,11 +6,13 @@ from rest_framework.response import Response
 
 from accounts.permissions import CanApproveSoftwareRequest, CanRejectSoftwareRequest, CanViewSecurityRequests
 from files_app.services.storage import FileStorageError
+from scanning.models import ScanResult
 
 from .models import SoftwareRequest
 from .request_metadata import request_metadata
 from .serializers import (
     RequestReprocessSerializer,
+    ScanDetailSerializer,
     SecurityRequestApproveSerializer,
     SecurityRequestDetailSerializer,
     SecurityRequestRejectSerializer,
@@ -40,6 +42,16 @@ class SecurityRequestDetailAPIView(RetrieveAPIView):
     serializer_class = SecurityRequestDetailSerializer
     permission_classes = [CanViewSecurityRequests]
     queryset = SoftwareRequest.objects.select_related("user", "review_file", "decided_by")
+
+
+class SecurityScanReportAPIView(RetrieveAPIView):
+    serializer_class = ScanDetailSerializer
+    permission_classes = [CanViewSecurityRequests]
+    queryset = ScanResult.objects.all()
+    lookup_url_kwarg = "scan_id"
+
+    def get_queryset(self):
+        return self.queryset.filter(request_id=self.kwargs.get("pk"))
 
 
 class SecurityRequestActionAPIView(GenericAPIView):

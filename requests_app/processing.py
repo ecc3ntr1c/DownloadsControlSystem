@@ -159,7 +159,7 @@ def _download(claimed, source):
 
 def _process_antiviruses(claimed, stored_file):
     _start_scan(claimed, stored_file)
-    checks = stored_file.antivirus_checks.filter(result__isnull=True).select_related("provider")
+    checks = stored_file.antivirus_checks.filter(result__isnull=True)
     for check in checks:
         now = timezone.now()
         deadline = check.created_at + timedelta(seconds=settings.ANTIVIRUS_MAX_WAIT_SECONDS)

@@ -6,7 +6,7 @@ from files_app.services.delivery import download_link
 from scanning.models import ScanResult
 
 from .models import SoftwareRequest
-from .review import approval_blockers, latest_scan
+from .review import approval_blockers, latest_scan, scan_reports
 from .source_urls import display_source_url, parse_source_url
 
 
@@ -148,6 +148,19 @@ class ScanSummarySerializer(serializers.ModelSerializer):
         fields = ("id", "provider", "verdict", "risk_level", "file_sha256", "normalized_result", "created_at")
 
 
+class ScanDetailSerializer(ScanSummarySerializer):
+    class Meta(ScanSummarySerializer.Meta):
+        fields = ScanSummarySerializer.Meta.fields + ("raw_result",)
+
+
+class ProviderReportSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    provider = serializers.CharField()
+    status = serializers.ChoiceField(choices=("pending", "waiting_report", "finished"))
+    last_error = serializers.CharField(allow_blank=True)
+    result = ScanSummarySerializer(allow_null=True)
+
+
 class ProhibitedMatchSerializer(serializers.ModelSerializer):
     rule_name = serializers.CharField(source="rule.name")
     reason = serializers.CharField(source="rule.reason")
@@ -160,14 +173,21 @@ class ProhibitedMatchSerializer(serializers.ModelSerializer):
 class SecurityRequestDetailSerializer(SoftwareRequestDetailSerializer):
     file = FileSummarySerializer(source="review_file", allow_null=True)
     scan = serializers.SerializerMethodField()
+    reports = serializers.SerializerMethodField()
     prohibited_matches = ProhibitedMatchSerializer(many=True)
     approval_blockers = serializers.SerializerMethodField()
     decided_by = serializers.StringRelatedField()
 
     @extend_schema_field(ScanSummarySerializer(allow_null=True))
     def get_scan(self, obj):
-        result = latest_scan(obj)
+        severity = {"CLEAN": 0, "UNKNOWN": 1, "FAILED": 2, "SUSPICIOUS": 3, "MALICIOUS": 4}
+        results = (report["result"] for report in scan_reports(obj) if report["result"] is not None)
+        result = max(results, key=lambda item: severity.get(item.verdict, 1), default=None)
         return ScanSummarySerializer(result).data if result else None
+
+    @extend_schema_field(ProviderReportSerializer(many=True))
+    def get_reports(self, obj):
+        return ProviderReportSerializer(scan_reports(obj), many=True).data
 
     @extend_schema_field(serializers.ListField(child=serializers.CharField()))
     def get_approval_blockers(self, obj):
@@ -175,7 +195,7 @@ class SecurityRequestDetailSerializer(SoftwareRequestDetailSerializer):
 
     class Meta(SoftwareRequestDetailSerializer.Meta):
         fields = SoftwareRequestDetailSerializer.Meta.fields + (
-            "file", "scan", "prohibited_matches", "approval_blockers", "decided_by",
+            "file", "scan", "reports", "prohibited_matches", "approval_blockers", "decided_by",
         )
 
 

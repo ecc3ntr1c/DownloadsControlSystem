@@ -1,0 +1,42 @@
+<section class="scan-report">
+  <h3>{{ report.name }}</h3>
+  {% with scan=report.result %}
+    {% if scan %}
+      <p><strong>{{ scan.get_verdict_display }}</strong> · {{ scan.created_at|date:"d.m.Y H:i" }}</p>
+      {% with stats=scan.normalized_result.stats %}
+        {% if stats %}
+          <p>Вредоносных: {{ stats.malicious }} · Подозрительных: {{ stats.suspicious }} · Без обнаружений: {{ stats.undetected }} · Безопасных: {{ stats.harmless }}</p>
+        {% endif %}
+      {% endwith %}
+      {% if scan.normalized_result.signature %}<p>Сигнатура: <code>{{ scan.normalized_result.signature }}</code></p>{% endif %}
+      {% if scan.normalized_result.message %}<p>{{ scan.normalized_result.message }}</p>{% endif %}
+      {% if scan.normalized_result.error %}<p>{{ scan.normalized_result.error }}</p>{% endif %}
+      {% if scan.raw_result %}
+        <details>
+          <summary>Подробный отчёт</summary>
+          {% if report.engines %}
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th scope="col">Антивирус</th><th scope="col">Категория</th><th scope="col">Результат</th><th scope="col">Версия</th></tr></thead>
+                <tbody>
+                  {% for engine in report.engines %}
+                    <tr><td>{{ engine.name }}</td><td>{{ engine.category|default:"—" }}</td>
+                      <td>{{ engine.result|default:"—" }}</td><td>{{ engine.version|default:"—" }}</td></tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% elif scan.raw_result.response %}
+            <p><code>{{ scan.raw_result.response }}</code></p>
+          {% elif report.details_json %}
+            <pre>{{ report.details_json }}</pre>
+          {% endif %}
+          <p><a href="{% url 'security-scan-report' item.pk scan.pk %}">Открыть отчёт JSON</a></p>
+        </details>
+      {% endif %}
+    {% else %}
+      <p>{% if report.status == "waiting_report" %}Ожидает отчёта{% else %}В очереди на проверку{% endif %}</p>
+      {% if report.last_error %}<p>{{ report.last_error }}</p>{% endif %}
+    {% endif %}
+  {% endwith %}
+</section>

@@ -71,3 +71,10 @@ code { overflow-wrap: anywhere; }
   .columns { grid-template-columns: 1fr; gap: 0; }
   .session { margin-inline-start: 0; }
 }
+
+.scan-report { border-top: 1px solid var(--line); padding-block: .8rem; }
+.scan-report h3, .scan-report p { margin: 0 0 .35rem; }
+.scan-report details { margin-top: .6rem; }
+.scan-report summary { cursor: pointer; color: var(--action); font-weight: 600; }
+.scan-report details .table-wrap { margin-block: .65rem; }
+.scan-report pre { white-space: pre-wrap; overflow-wrap: anywhere; }

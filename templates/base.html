@@ -17,6 +17,7 @@
           {% if perms.requests_app.view_security_requests %}<a href="{% url 'portal-security' %}">Очередь ИБ</a>{% endif %}
           <a href="{% url 'notification-inbox' %}">Уведомления</a>
           {% if user.is_staff %}<a href="{% url 'admin:index' %}">Администрирование</a>{% endif %}
+          {% if user.is_superuser %}<a href="{% url 'admin:scanning_antivirusprovider_changelist' %}">Антивирусы</a>{% endif %}
         </nav>
         <form class="session" method="post" action="{% url 'logout' %}">
           {% csrf_token %}<span>{{ user.get_username }}</span><button class="secondary" type="submit">Выйти</button>

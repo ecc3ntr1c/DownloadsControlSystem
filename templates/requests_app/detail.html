@@ -43,13 +43,11 @@
         <dt>Хранилище</dt><dd>{{ file.get_storage_zone_display }}</dd>
       </dl>
     {% endif %}
-    {% if scan %}
-      <p><strong>{{ scan.get_provider_display }} · {{ scan.get_verdict_display }}</strong></p>
-      {% if scan.normalized_result.signature %}<p>Сигнатура: <code>{{ scan.normalized_result.signature }}</code></p>{% endif %}
-      {% if scan.normalized_result.error %}<p>{{ scan.normalized_result.error }}</p>{% endif %}
-    {% else %}
+    {% for report in reports %}
+      {% include "requests_app/scan_report.html" %}
+    {% empty %}
       <p>Результат антивирусной проверки пока отсутствует.</p>
-    {% endif %}
+    {% endfor %}
     {% if matches %}
       <h3>Совпадения с реестром запрещённого ПО</h3>
       <ul>{% for match in matches %}<li>{{ match.rule.name }}. {{ match.rule.reason }}{% if match.is_overridden %} · ИБ согласовала исключение{% endif %}</li>{% endfor %}</ul>
