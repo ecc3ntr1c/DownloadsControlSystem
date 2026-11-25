@@ -1,0 +1,4 @@
+enable
+configure terminal
+spanning-tree vlan 1 root primary
+end

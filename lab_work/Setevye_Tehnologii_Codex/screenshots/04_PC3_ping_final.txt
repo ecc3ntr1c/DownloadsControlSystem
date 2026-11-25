@@ -1,0 +1,134 @@
+Window: "PC3", App: Cisco Packet Tracer.
+0 standard window PC3, Secondary Actions: Raise
+	1 container PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_stackedwidget
+		2 text Description: Command Prompt , ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_stackedwidget.m_DeskTopTab.scrollArea.qt_scrollarea_viewport.desktopScrollAreaWidgetContents.CDesktopApplet.CWorkstationCommandPromptBase.m_titleBar.m_titleLabel
+		3 button close, Secondary Actions: Raise, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_stackedwidget.m_DeskTopTab.scrollArea.qt_scrollarea_viewport.desktopScrollAreaWidgetContents.CDesktopApplet.CWorkstationCommandPromptBase.m_titleBar.m_closeButton
+		4 text entry area (settable) Command+F6 to exit CLI focus., Secondary Actions: Raise, Value: 
+Cisco Packet Tracer PC Command Line 1.0
+C:\>ipconfig
+
+FastEthernet0 Connection:(default port)
+
+   Connection-specific DNS Suffix..: 
+   Link-local IPv6 Address.........: FE80::290:2BFF:FE2A:E403
+   IPv6 Address....................: ::
+   IPv4 Address....................: 192.168.2.2
+   Subnet Mask.....................: 255.255.254.0
+   Default Gateway.................: ::
+                                     192.168.2.1
+
+Bluetooth Connection:
+
+   Connection-specific DNS Suffix..: 
+   Link-local IPv6 Address.........: ::
+   IPv6 Address....................: ::
+   IPv4 Address....................: 0.0.0.0
+   Subnet Mask.....................: 0.0.0.0
+   Default Gateway.................: ::
+                                     0.0.0.0
+
+C:\>ping 192.168.1.254
+
+Pinging 192.168.1.254 with 32 bytes of data:
+
+Request timed out.
+Request timed out.
+Reply from 192.168.1.254: bytes=32 time<1ms TTL=126
+Reply from 192.168.1.254: bytes=32 time=1ms TTL=126
+
+Ping statistics for 192.168.1.254:
+    Packets: Sent = 4, Received = 2, Lost = 2 (50% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 1ms, Average = 0ms
+
+C:\>ping 192.168.1.254
+
+Pinging 192.168.1.254 with 32 bytes of data:
+
+Reply from 192.168.1.254: bytes=32 time=4ms TTL=126
+Reply from 192.168.1.254: bytes=32 time=9ms TTL=126
+Reply from 192.168.1.254: bytes=32 time<1ms TTL=126
+Reply from 192.168.1.254: bytes=32 time<1ms TTL=126
+
+Ping statistics for 192.168.1.254:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 9ms, Average = 3ms
+
+C:\>, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_stackedwidget.m_DeskTopTab.scrollArea.qt_scrollarea_viewport.desktopScrollAreaWidgetContents.CDesktopApplet.CWorkstationCommandPromptBase.CCommandLine
+			5 scroll bar (settable) Value: 142, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_stackedwidget.m_DeskTopTab.scrollArea.qt_scrollarea_viewport.desktopScrollAreaWidgetContents.CDesktopApplet.CWorkstationCommandPromptBase.CCommandLine.qt_scrollarea_vcontainer.QScrollBar
+	6 tab group Desktop, Secondary Actions: Raise, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_tabbar
+		7 tab Physical, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_tabbar
+		8 tab Config, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_tabbar
+		9 tab Desktop, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_tabbar
+		10 tab Programming, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_tabbar
+		11 tab Attributes, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_tabbar
+	12 checkbox Top, Value: 0, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.topCB, Secondary Actions: Raise
+	13 close button
+	14 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	15 minimize button
+	16 text PC3
+17 menu bar
+	18 Cisco Packet Tracer
+	19 File
+	20 Edit
+	21 Options
+	22 View
+	23 Tools
+	24 Extensions
+	25 Window
+	26 Help
+
+The focused UI element is 4 text entry area (settable) Command+F6 to exit CLI focus., Secondary Actions: Raise, Value: 
+Cisco Packet Tracer PC Command Line 1.0
+C:\>ipconfig
+
+FastEthernet0 Connection:(default port)
+
+   Connection-specific DNS Suffix..: 
+   Link-local IPv6 Address.........: FE80::290:2BFF:FE2A:E403
+   IPv6 Address....................: ::
+   IPv4 Address....................: 192.168.2.2
+   Subnet Mask.....................: 255.255.254.0
+   Default Gateway.................: ::
+                                     192.168.2.1
+
+Bluetooth Connection:
+
+   Connection-specific DNS Suffix..: 
+   Link-local IPv6 Address.........: ::
+   IPv6 Address....................: ::
+   IPv4 Address....................: 0.0.0.0
+   Subnet Mask.....................: 0.0.0.0
+   Default Gateway.................: ::
+                                     0.0.0.0
+
+C:\>ping 192.168.1.254
+
+Pinging 192.168.1.254 with 32 bytes of data:
+
+Request timed out.
+Request timed out.
+Reply from 192.168.1.254: bytes=32 time<1ms TTL=126
+Reply from 192.168.1.254: bytes=32 time=1ms TTL=126
+
+Ping statistics for 192.168.1.254:
+    Packets: Sent = 4, Received = 2, Lost = 2 (50% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 1ms, Average = 0ms
+
+C:\>ping 192.168.1.254
+
+Pinging 192.168.1.254 with 32 bytes of data:
+
+Reply from 192.168.1.254: bytes=32 time=4ms TTL=126
+Reply from 192.168.1.254: bytes=32 time=9ms TTL=126
+Reply from 192.168.1.254: bytes=32 time<1ms TTL=126
+Reply from 192.168.1.254: bytes=32 time<1ms TTL=126
+
+Ping statistics for 192.168.1.254:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 9ms, Average = 3ms
+
+C:\>, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_stackedwidget.m_DeskTopTab.scrollArea.qt_scrollarea_viewport.desktopScrollAreaWidgetContents.CDesktopApplet.CWorkstationCommandPromptBase.CCommandLine

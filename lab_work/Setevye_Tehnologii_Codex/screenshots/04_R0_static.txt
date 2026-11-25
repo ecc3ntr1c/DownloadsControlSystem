@@ -1,0 +1,226 @@
+The following is a diff from the previous accessibility tree for Window: "Router0" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~		63 text entry area (settable) Command+F6 to exit CLI focus., Secondary Actions: Raise, Value: System Bootstrap, Version 12.1(3r)T2, RELEASE SOFTWARE (fc1)
+Copyright (c) 2000 by cisco Systems, Inc.
+PT 1001 (PTSC2005) processor (revision 0x200) with 60416K/5120K bytes of memory
+
+Readonly ROMMON initialized
+
+Self decompressing the image :
+######################### [OK]
+
+              Restricted Rights Legend
+
+Use, duplication, or disclosure by the Government is
+subject to restrictions as set forth in subparagraph
+(c) of the Commercial Computer Software - Restricted
+Rights clause at FAR sec. 52.227-19 and subparagraph
+(c) (1) (ii) of the Rights in Technical Data and Computer
+Software clause at DFARS sec. 252.227-7013.
+
+           cisco Systems, Inc.
+           170 West Tasman Drive
+           San Jose, California 95134-1706
+
+
+
+Cisco Internetwork Operating System Software
+IOS (tm) PT1000 Software (PT1000-I-M), Version 12.2(28), RELEASE SOFTWARE (fc5)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2005 by cisco Systems, Inc.
+Compiled Wed 27-Apr-04 19:01 by miwang
+
+PT 1001 (PTSC2005) processor (revision 0x200) with 60416K/5120K bytes of memory
+.
+Processor board ID PT0123 (0123)
+PT2005 processor: part number 0, mask 01
+Bridging software.
+X.25 software, Version 3.0.0.
+1 FastEthernet/IEEE 802.3 interface(s)
+2 Gigabit Ethernet/IEEE 802.3 interface(s)
+32K bytes of non-volatile configuration memory.
+63488K bytes of ATA CompactFlash (Read/Write)
+
+Press RETURN to get started!
+
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet7/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet9/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet8/0, changed state to up
+
+
+Router0>l
+
+
+
+
+
+
+
+
+
+Router0 con0 is now available
+
+
+
+
+
+
+Press RETURN to get started.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Router0>
+Router0>enable
+Router0#show ip interface brief
+Interface              IP-Address      OK? Method Status                Protocol 
+FastEthernet7/0        192.168.4.1     YES unset  up                    up 
+GigabitEthernet8/0     172.16.3.1      YES unset  up                    up 
+GigabitEthernet9/0     172.16.1.1      YES unset  up                    up
+Router0#show ip dhcp binding
+IP address       Client-ID/              Lease expiration        Type
+                 Hardware address
+192.168.4.2      0212.0000.20AA           --                     Automatic
+Router0#show ip route
+Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     172.16.0.0/24 is subnetted, 2 subnets
+C       172.16.1.0 is directly connected, GigabitEthernet9/0
+C       172.16.3.0 is directly connected, GigabitEthernet8/0
+S    192.168.2.0/23 [1/0] via 172.16.1.2
+     192.168.4.0/27 is subnetted, 1 subnets
+C       192.168.4.0 is directly connected, FastEthernet7/0
+
+Router0#, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_stackedwidget.m_cliTab.CCommandLine
+~			64 scroll bar (settable) Value: 1003, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_stackedwidget.m_cliTab.CCommandLine.qt_scrollarea_vcontainer.QScrollBar
+The focused UI element is 63 text entry area (settable) Command+F6 to exit CLI focus., Secondary Actions: Raise, Value: System Bootstrap, Version 12.1(3r)T2, RELEASE SOFTWARE (fc1)
+Copyright (c) 2000 by cisco Systems, Inc.
+PT 1001 (PTSC2005) processor (revision 0x200) with 60416K/5120K bytes of memory
+
+Readonly ROMMON initialized
+
+Self decompressing the image :
+######################### [OK]
+
+              Restricted Rights Legend
+
+Use, duplication, or disclosure by the Government is
+subject to restrictions as set forth in subparagraph
+(c) of the Commercial Computer Software - Restricted
+Rights clause at FAR sec. 52.227-19 and subparagraph
+(c) (1) (ii) of the Rights in Technical Data and Computer
+Software clause at DFARS sec. 252.227-7013.
+
+           cisco Systems, Inc.
+           170 West Tasman Drive
+           San Jose, California 95134-1706
+
+
+
+Cisco Internetwork Operating System Software
+IOS (tm) PT1000 Software (PT1000-I-M), Version 12.2(28), RELEASE SOFTWARE (fc5)
+Technical Support: http://www.cisco.com/techsupport
+Copyright (c) 1986-2005 by cisco Systems, Inc.
+Compiled Wed 27-Apr-04 19:01 by miwang
+
+PT 1001 (PTSC2005) processor (revision 0x200) with 60416K/5120K bytes of memory
+.
+Processor board ID PT0123 (0123)
+PT2005 processor: part number 0, mask 01
+Bridging software.
+X.25 software, Version 3.0.0.
+1 FastEthernet/IEEE 802.3 interface(s)
+2 Gigabit Ethernet/IEEE 802.3 interface(s)
+32K bytes of non-volatile configuration memory.
+63488K bytes of ATA CompactFlash (Read/Write)
+
+Press RETURN to get started!
+
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet7/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet9/0, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet8/0, changed state to up
+
+
+Router0>l
+
+
+
+
+
+
+
+
+
+Router0 con0 is now available
+
+
+
+
+
+
+Press RETURN to get started.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Router0>
+Router0>enable
+Router0#show ip interface brief
+Interface              IP-Address      OK? Method Status                Protocol 
+FastEthernet7/0        192.168.4.1     YES unset  up                    up 
+GigabitEthernet8/0     172.16.3.1      YES unset  up                    up 
+GigabitEthernet9/0     172.16.1.1      YES unset  up                    up
+Router0#show ip dhcp binding
+IP address       Client-ID/              Lease expiration        Type
+                 Hardware address
+192.168.4.2      0212.0000.20AA           --                     Automatic
+Router0#show ip route
+Codes: C - connected, S - static, I - IGRP, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     172.16.0.0/24 is subnetted, 2 subnets
+C       172.16.1.0 is directly connected, GigabitEthernet9/0
+C       172.16.3.0 is directly connected, GigabitEthernet8/0
+S    192.168.2.0/23 [1/0] via 172.16.1.2
+     192.168.4.0/27 is subnetted, 1 subnets
+C       192.168.4.0 is directly connected, FastEthernet7/0
+
+Router0#, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_stackedwidget.m_cliTab.CCommandLine

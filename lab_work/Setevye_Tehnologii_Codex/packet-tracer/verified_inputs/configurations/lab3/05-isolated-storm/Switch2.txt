@@ -1,0 +1,4 @@
+enable
+configure terminal
+no spanning-tree vlan 1
+end

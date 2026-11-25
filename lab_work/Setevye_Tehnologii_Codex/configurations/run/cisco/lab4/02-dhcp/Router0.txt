@@ -1,0 +1,10 @@
+enable
+configure terminal
+service dhcp
+ip dhcp excluded-address 192.168.4.1
+ip dhcp excluded-address 192.168.4.30
+ip dhcp pool LAN1
+ network 192.168.4.0 255.255.255.224
+ default-router 192.168.4.1
+exit
+end

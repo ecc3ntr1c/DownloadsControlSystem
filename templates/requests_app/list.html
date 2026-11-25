@@ -25,7 +25,7 @@
           <a href="{% if security %}{% url 'portal-security-request' item.pk %}{% else %}{% url 'portal-request' item.pk %}{% endif %}">№ {{ item.pk }}</a>
           <span class="description">{{ item.description|truncatechars:100 }}</span>
         </td>
-        {% if security %}<td>{{ item.user.get_username }}</td>{% endif %}
+        {% if security %}<td class="account-name">{{ item.user.get_full_name|default:item.user.get_username }}</td>{% endif %}
         <td>{{ item.get_request_status_display }}</td>
         <td>{{ item.get_scan_status_display }}</td>
         <td><time datetime="{{ item.created_at|date:'c' }}">{{ item.created_at|date:"d.m.Y H:i" }}</time></td>

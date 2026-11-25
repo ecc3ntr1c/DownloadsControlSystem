@@ -1,0 +1,86 @@
+Window: "PC0", App: Cisco Packet Tracer.
+0 standard window PC0, Secondary Actions: Raise
+	1 container PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_stackedwidget
+		2 text Description: Command Prompt , ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_stackedwidget.m_DeskTopTab.scrollArea.qt_scrollarea_viewport.desktopScrollAreaWidgetContents.CDesktopApplet.CWorkstationCommandPromptBase.m_titleBar.m_titleLabel
+		3 button close, Secondary Actions: Raise, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_stackedwidget.m_DeskTopTab.scrollArea.qt_scrollarea_viewport.desktopScrollAreaWidgetContents.CDesktopApplet.CWorkstationCommandPromptBase.m_titleBar.m_closeButton
+		4 text entry area (settable) Command+F6 to exit CLI focus., Secondary Actions: Raise, Value: 
+Cisco Packet Tracer PC Command Line 1.0
+C:\>ping 192.168.4.3
+
+Pinging 192.168.4.3 with 32 bytes of data:
+
+Reply from 192.168.4.3: bytes=32 time<1ms TTL=128
+Reply from 192.168.4.3: bytes=32 time<1ms TTL=128
+Reply from 192.168.4.3: bytes=32 time<1ms TTL=128
+Reply from 192.168.4.3: bytes=32 time<1ms TTL=128
+
+Ping statistics for 192.168.4.3:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+
+C:\>ping 192.168.4.3
+
+Pinging 192.168.4.3 with 32 bytes of data:
+
+Reply from 192.168.4.3: bytes=32 time<1ms TTL=128
+Reply from 192.168.4.3: bytes=32 time<1ms TTL=128
+Reply from 192.168.4.3: bytes=32 time<1ms TTL=128
+Reply from 192.168.4.3: bytes=32 time<1ms TTL=128
+
+Ping statistics for 192.168.4.3:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+
+C:\>, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_stackedwidget.m_DeskTopTab.scrollArea.qt_scrollarea_viewport.desktopScrollAreaWidgetContents.CDesktopApplet.CWorkstationCommandPromptBase.CCommandLine
+	5 tab group Desktop, Secondary Actions: Raise, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_tabbar
+		6 tab Physical, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_tabbar
+		7 tab Config, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_tabbar
+		8 tab Desktop, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_tabbar
+		9 tab Programming, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_tabbar
+		10 tab Attributes, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_tabbar
+	11 checkbox Top, Value: 0, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.topCB, Secondary Actions: Raise
+	12 text PC0
+13 menu bar
+	14 Cisco Packet Tracer
+	15 File
+	16 Edit
+	17 Options
+	18 View
+	19 Tools
+	20 Extensions
+	21 Window
+	22 Help
+
+The focused UI element is 4 text entry area (settable) Command+F6 to exit CLI focus., Secondary Actions: Raise, Value: 
+Cisco Packet Tracer PC Command Line 1.0
+C:\>ping 192.168.4.3
+
+Pinging 192.168.4.3 with 32 bytes of data:
+
+Reply from 192.168.4.3: bytes=32 time<1ms TTL=128
+Reply from 192.168.4.3: bytes=32 time<1ms TTL=128
+Reply from 192.168.4.3: bytes=32 time<1ms TTL=128
+Reply from 192.168.4.3: bytes=32 time<1ms TTL=128
+
+Ping statistics for 192.168.4.3:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+
+C:\>ping 192.168.4.3
+
+Pinging 192.168.4.3 with 32 bytes of data:
+
+Reply from 192.168.4.3: bytes=32 time<1ms TTL=128
+Reply from 192.168.4.3: bytes=32 time<1ms TTL=128
+Reply from 192.168.4.3: bytes=32 time<1ms TTL=128
+Reply from 192.168.4.3: bytes=32 time<1ms TTL=128
+
+Ping statistics for 192.168.4.3:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+
+C:\>, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_stackedwidget.m_DeskTopTab.scrollArea.qt_scrollarea_viewport.desktopScrollAreaWidgetContents.CDesktopApplet.CWorkstationCommandPromptBase.CCommandLine

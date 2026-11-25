@@ -1,0 +1,800 @@
+[
+  {
+    "source": "01_topology.png",
+    "output": "01_topology_report.png",
+    "source_size": [
+      1900,
+      1456
+    ],
+    "box": [
+      35,
+      455,
+      980,
+      920
+    ]
+  },
+  {
+    "source": "01_PC1_IP.png",
+    "output": "01_PC1_IP_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      0,
+      0,
+      1616,
+      650
+    ]
+  },
+  {
+    "source": "01_PC5_IP.png",
+    "output": "01_PC5_IP_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      0,
+      0,
+      1616,
+      650
+    ]
+  },
+  {
+    "source": "01_R0_interfaces.png",
+    "output": "01_R0_interfaces_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      46,
+      1110,
+      1270,
+      1316
+    ]
+  },
+  {
+    "source": "01_PC1_ping.png",
+    "output": "01_PC1_ping_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      50,
+      447,
+      1060,
+      825
+    ]
+  },
+  {
+    "source": "04_topology.png",
+    "output": "04_topology_report.png",
+    "source_size": [
+      1900,
+      1456
+    ],
+    "box": [
+      80,
+      395,
+      825,
+      925
+    ]
+  },
+  {
+    "source": "04_R0_interfaces_dhcp.png",
+    "output": "04_R0_interfaces_dhcp_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      46,
+      974,
+      1240,
+      1316
+    ]
+  },
+  {
+    "source": "04_R0_static.png",
+    "output": "04_R0_static_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      46,
+      782,
+      1240,
+      1316
+    ]
+  },
+  {
+    "source": "04_R1_static_dhcp.png",
+    "output": "04_R1_static_dhcp_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      46,
+      472,
+      1260,
+      1316
+    ]
+  },
+  {
+    "source": "04_R2_static_dhcp.png",
+    "output": "04_R2_static_dhcp_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      46,
+      670,
+      1260,
+      1316
+    ]
+  },
+  {
+    "source": "04_PC1_dhcp_static_ping.png",
+    "output": "04_PC1_dhcp_static_ping_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      0,
+      0,
+      1616,
+      585
+    ]
+  },
+  {
+    "source": "04_PC3_dhcp_static_ping.png",
+    "output": "04_PC3_dhcp_static_ping_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      0,
+      0,
+      1616,
+      585
+    ]
+  },
+  {
+    "source": "04_PC5_dhcp.png",
+    "output": "04_PC5_dhcp_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      0,
+      0,
+      1616,
+      585
+    ]
+  },
+  {
+    "source": "04_PC0_rip_ping.png",
+    "output": "04_PC0_rip_ping_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      50,
+      875,
+      1100,
+      1250
+    ]
+  },
+  {
+    "source": "04_R0_rip_protocols.png",
+    "output": "04_R0_rip_protocols_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      46,
+      640,
+      1240,
+      1316
+    ]
+  },
+  {
+    "source": "04_R0_rip_routes.png",
+    "output": "04_R0_rip_routes_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      46,
+      722,
+      1240,
+      1316
+    ]
+  },
+  {
+    "source": "04_R2_rip_routes.png",
+    "output": "04_R2_rip_routes_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      46,
+      722,
+      1240,
+      1316
+    ]
+  },
+  {
+    "source": "01_PDU.png",
+    "output": "01_PDU_report.png",
+    "source_size": [
+      1900,
+      1456
+    ],
+    "box": [
+      2,
+      575,
+      1300,
+      750
+    ]
+  },
+  {
+    "source": "01_PC1_ping_remote.png",
+    "output": "01_PC1_ping_remote_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      50,
+      1025,
+      1100,
+      1405
+    ]
+  },
+  {
+    "source": "02a_topology.png",
+    "output": "02a_topology_report.png",
+    "source_size": [
+      1900,
+      1456
+    ],
+    "box": [
+      80,
+      420,
+      1160,
+      915
+    ]
+  },
+  {
+    "source": "02a_PC11_IP.png",
+    "output": "02a_PC11_IP_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      0,
+      0,
+      1616,
+      650
+    ]
+  },
+  {
+    "source": "02a_S0_vlan.png",
+    "output": "02a_S0_vlan_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      46,
+      780,
+      1240,
+      1316
+    ]
+  },
+  {
+    "source": "02a_S0_access_config.png",
+    "output": "02a_S0_access_config_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      46,
+      579,
+      670,
+      1115
+    ]
+  },
+  {
+    "source": "02a_S0_trunk.png",
+    "output": "02a_S0_trunk_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      46,
+      920,
+      1060,
+      1316
+    ]
+  },
+  {
+    "source": "02a_S1_trunk.png",
+    "output": "02a_S1_trunk_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      46,
+      782,
+      1060,
+      1316
+    ]
+  },
+  {
+    "source": "02a_S2_trunk.png",
+    "output": "02a_S2_trunk_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      46,
+      890,
+      1060,
+      1316
+    ]
+  },
+  {
+    "source": "02a_PDU_isolation.png",
+    "output": "02a_PDU_isolation_report.png",
+    "source_size": [
+      1900,
+      1456
+    ],
+    "box": [
+      2,
+      575,
+      1280,
+      830
+    ]
+  },
+  {
+    "source": "02b_topology.png",
+    "output": "02b_topology_report.png",
+    "source_size": [
+      1900,
+      1456
+    ],
+    "box": [
+      65,
+      390,
+      890,
+      900
+    ]
+  },
+  {
+    "source": "02b_R0_dot1q.png",
+    "output": "02b_R0_dot1q_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      46,
+      860,
+      660,
+      1192
+    ]
+  },
+  {
+    "source": "02b_R0_interfaces.png",
+    "output": "02b_R0_interfaces_report.png",
+    "source_size": [
+      1616,
+      1546
+    ],
+    "box": [
+      46,
+      1030,
+      1240,
+      1316
+    ]
+  },
+  {
+    "source": "02b_PDU_routing.png",
+    "output": "02b_PDU_routing_report.png",
+    "source_size": [
+      3292,
+      2146
+    ],
+    "box": [
+      2,
+      1310,
+      1275,
+      1570
+    ]
+  },
+  {
+    "source": "02c_R0_native.png",
+    "output": "02c_R0_native_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1465,
+      660,
+      1887
+    ]
+  },
+  {
+    "source": "02c_R0_interfaces.png",
+    "output": "02c_R0_interfaces_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1590,
+      1240,
+      1915
+    ]
+  },
+  {
+    "source": "02c_S0_vlan_details.png",
+    "output": "02c_S0_vlan_details_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      815,
+      1210,
+      1915
+    ]
+  },
+  {
+    "source": "02c_S1_vlan.png",
+    "output": "02c_S1_vlan_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1400,
+      1210,
+      1915
+    ]
+  },
+  {
+    "source": "02c_S0_trunk.png",
+    "output": "02c_S0_trunk_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1485,
+      1060,
+      1915
+    ]
+  },
+  {
+    "source": "02c_S1_trunk.png",
+    "output": "02c_S1_trunk_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1407,
+      1060,
+      1915
+    ]
+  },
+  {
+    "source": "02c_S2_vlan.png",
+    "output": "02c_S2_vlan_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1372,
+      1210,
+      1915
+    ]
+  },
+  {
+    "source": "02c_S2_trunk.png",
+    "output": "02c_S2_trunk_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1407,
+      1060,
+      1915
+    ]
+  },
+  {
+    "source": "02c_PDU_native.png",
+    "output": "02c_PDU_native_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      2,
+      1309,
+      1280,
+      1530
+    ]
+  },
+  {
+    "source": "02c_PDU_all12.png",
+    "output": "02c_PDU_all12_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      2,
+      1045,
+      1280,
+      1585
+    ]
+  },
+  {
+    "source": "03a_topology.png",
+    "output": "03a_topology_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      120,
+      435,
+      1305,
+      945
+    ]
+  },
+  {
+    "source": "03a_S0_stp.png",
+    "output": "03a_S0_stp_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1320,
+      1180,
+      1915
+    ]
+  },
+  {
+    "source": "03a_S1_stp.png",
+    "output": "03a_S1_stp_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1290,
+      1180,
+      1915
+    ]
+  },
+  {
+    "source": "03a_S2_stp.png",
+    "output": "03a_S2_stp_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1290,
+      1180,
+      1915
+    ]
+  },
+  {
+    "source": "03b_S2_root.png",
+    "output": "03b_S2_root_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1180,
+      1180,
+      1915
+    ]
+  },
+  {
+    "source": "03b_S0_stp.png",
+    "output": "03b_S0_stp_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1290,
+      1180,
+      1915
+    ]
+  },
+  {
+    "source": "03b_S1_stp.png",
+    "output": "03b_S1_stp_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1290,
+      1180,
+      1915
+    ]
+  },
+  {
+    "source": "03c_topology.png",
+    "output": "03c_topology_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      120,
+      435,
+      1305,
+      945
+    ]
+  },
+  {
+    "source": "03c_S0_stp.png",
+    "output": "03c_S0_stp_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      790,
+      1240,
+      1915
+    ]
+  },
+  {
+    "source": "03c_S2_etherchannel.png",
+    "output": "03c_S2_etherchannel_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1350,
+      1240,
+      1915
+    ]
+  },
+  {
+    "source": "03d_S0_linkdown.png",
+    "output": "03d_S0_linkdown_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1020,
+      1320,
+      1915
+    ]
+  },
+  {
+    "source": "03d_S0_stp.png",
+    "output": "03d_S0_stp_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1320,
+      1180,
+      1915
+    ]
+  },
+  {
+    "source": "03d_PC0_ping.png",
+    "output": "03d_PC0_ping_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      50,
+      230,
+      1050,
+      1095
+    ]
+  },
+  {
+    "source": "03e_S0_stp_off.png",
+    "output": "03e_S0_stp_off_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1740,
+      620,
+      1915
+    ]
+  },
+  {
+    "source": "03e_S1_stp_off.png",
+    "output": "03e_S1_stp_off_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1740,
+      620,
+      1915
+    ]
+  },
+  {
+    "source": "03e_S2_stp_off.png",
+    "output": "03e_S2_stp_off_report.png",
+    "source_size": [
+      3420,
+      2146
+    ],
+    "box": [
+      46,
+      1740,
+      620,
+      1915
+    ]
+  }
+]

@@ -1,0 +1,142 @@
+Window: "Cisco Packet Tracer - /Users/alexandr/PyCharmMiscProject/DownloadsControl/lab_work/Setevye_Tehnologii_Codex/packet-tracer/verified_inputs/03e_STP_loop_Isolated.pkt", App: Cisco Packet Tracer.
+0 standard window Secondary Actions: Raise, Cisco Packet Tracer - /Users/alexandr/PyCharmMiscProject/DownloadsControl/lab_work/Setevye_Tehnologii_Codex/packet-tracer/verified_inputs/03e_STP_loop_Isolated.pkt
+	1 checkbox Logical Mode, Description: Logical Mode (Shift+L), Value: 1, ID: PtApp.CAppWindowBase.centralwidget.m_PLFrame.m_logicalSwitch, Secondary Actions: Raise
+	2 checkbox Physical Mode, Description: Physical Mode (Shift+P), Value: 0, ID: PtApp.CAppWindowBase.centralwidget.m_PLFrame.m_physicalSwitch, Secondary Actions: Raise
+	3 text Description: X and Y coordinates of mouse, ID: PtApp.CAppWindowBase.centralwidget.m_PLFrame.m_logicalToolbar.m_xyLabel, Secondary Actions: Raise
+	4 text field (settable) Current Cluster Name, Description: Root, ID: PtApp.CAppWindowBase.centralwidget.m_PLFrame.m_logicalToolbar.m_curClusterNameLbl, Secondary Actions: Raise
+	5 button (disabled) Go Back One Level (Alt+Left), ID: PtApp.CAppWindowBase.centralwidget.m_PLFrame.m_logicalToolbar.m_BtnBack
+	6 button Create New Cluster (Shift+U), ID: PtApp.CAppWindowBase.centralwidget.m_PLFrame.m_logicalToolbar.m_createClusterBtn, Secondary Actions: Raise
+	7 button (disabled) Move Object(Shift+M), ID: PtApp.CAppWindowBase.centralwidget.m_PLFrame.m_logicalToolbar.m_moveBtn
+	8 button Set Background Image (Shift+I), ID: PtApp.CAppWindowBase.centralwidget.m_PLFrame.m_logicalToolbar.m_setBGImageBtn, Secondary Actions: Raise
+	9 button Environment (Shift+E), ID: PtApp.CAppWindowBase.centralwidget.m_PLFrame.m_logicalToolbar.m_environmentBtn, Secondary Actions: Raise
+	10 container Workspace Description
+	11 text Value: List of PDU Columns Visibility Time(seconds) Last Device At Device Type, ID: PtApp.CAppWindowBase.centralwidget.m_pWorkSpaceWnd.m_pViewArea_Window.QDockWidget.CBaseSimulationPanel.frame.label
+	12 outline List of PDU Columns Visibility Time(seconds) Last Device At Device Type
+		13 column List of PDU Columns Visibility Time(seconds) Last Device At Device Type
+		14 column List of PDU Columns Visibility Time(seconds) Last Device At Device Type
+		15 column List of PDU Columns Visibility Time(seconds) Last Device At Device Type
+		16 column List of PDU Columns Visibility Time(seconds) Last Device At Device Type
+		17 column List of PDU Columns Visibility Time(seconds) Last Device At Device Type
+	18 button Reset Simulation, Description: Resets the simulation., Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pWorkSpaceWnd.m_pViewArea_Window.QDockWidget.CBaseSimulationPanel.frame.ResetSimulationBtn
+	19 checkbox Constant Delay, Description: Disable random packet transmission delay jitter, Value: 1, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pWorkSpaceWnd.m_pViewArea_Window.QDockWidget.CBaseSimulationPanel.frame.ConstantDelayBtn
+	20 text Value: Captured to:
+ (no captures) * Play Controls, ID: PtApp.CAppWindowBase.centralwidget.m_pWorkSpaceWnd.m_pViewArea_Window.QDockWidget.CBaseSimulationPanel.frame.m_capTillLbl
+	21 button View packets in previous step, Description: Go Back to Previous Event (Option + B)., Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pWorkSpaceWnd.m_pViewArea_Window.QDockWidget.CBaseSimulationPanel.frame_2.BackBtn
+	22 checkbox Auto Capture / Play, Description: Play (Option + P), Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pWorkSpaceWnd.m_pViewArea_Window.QDockWidget.CBaseSimulationPanel.frame_2.PlayBtn
+	23 button Step forward packets to the next step, Description: If last event, capture then forward (Option + C)., Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pWorkSpaceWnd.m_pViewArea_Window.QDockWidget.CBaseSimulationPanel.frame_2.ForwardBtn
+	24 slider (settable) Play speed slider, Description: Play Speed Slider, Value: 50, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pWorkSpaceWnd.m_pViewArea_Window.QDockWidget.CBaseSimulationPanel.frame_2.m_playSpeedSlider
+	25 text Value: Event List Filters - Visible Events ACL Filter, ARP, BGP, Bluetooth, CAPWAP, CDP, DHCP, DHCPv6, DNS, DTP, EAPOL, EIGRP, EIGRPv6, FTP, H.323, HSRP, HSRPv6, HTTP, HTTPS, ICMP, ICMPv6, IPSec, ISAKMP, IoT, IoT TCP, LACP, LLDP, NDP, NETFLOW, NTP, OSPF, OSPFv6, PAgP, POP3, PPP, PPPoED, PTP, RADIUS, REP, RIP, RIPng, RTP, SCCP, SMTP, SNMP, SSH, STP, SYSLOG, TACACS, TCP, TFTP, Telnet, UDP, USB, VTP, ID: PtApp.CAppWindowBase.centralwidget.m_pWorkSpaceWnd.m_pViewArea_Window.QDockWidget.CBaseSimulationPanel.frame_3.label_3
+	26 button Edit Filters, Description: Edit what types of events to show., Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pWorkSpaceWnd.m_pViewArea_Window.QDockWidget.CBaseSimulationPanel.frame_3.EditFilterBtn
+	27 button Enable or disable all filters., Description: Shows or hides all event types., Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pWorkSpaceWnd.m_pViewArea_Window.QDockWidget.CBaseSimulationPanel.frame_3.ShowAllBtn
+	28 button Close, Description: Closes the dock widget, ID: PtApp.CAppWindowBase.centralwidget.m_pWorkSpaceWnd.m_pViewArea_Window.QDockWidget.qt_dockwidget_closebutton
+	29 button Float, Description: Undocks and re-attaches the dock widget, ID: PtApp.CAppWindowBase.centralwidget.m_pWorkSpaceWnd.m_pViewArea_Window.QDockWidget.qt_dockwidget_floatbutton
+	30 text Description: Time, ID: PtApp.CAppWindowBase.centralwidget.m_RSFrame.CSimulationToolbar.m_timeLbl, Secondary Actions: Raise
+	31 button Power Cycle Devices, ID: PtApp.CAppWindowBase.centralwidget.m_RSFrame.CSimulationToolbar.ResetNetworkBtn, Secondary Actions: Raise
+	32 text Description: PLAY CONTROLS:, Value: Play Controls, ID: PtApp.CAppWindowBase.centralwidget.m_RSFrame.CSimulationToolbar.m_playControlsLabel
+	33 button Go Back to Previous Events, Description: Back, ID: PtApp.CAppWindowBase.centralwidget.m_RSFrame.CSimulationToolbar.BackBtn, Secondary Actions: Raise
+	34 checkbox Play, Description: Auto Capture / Play, Value: 0, ID: PtApp.CAppWindowBase.centralwidget.m_RSFrame.CSimulationToolbar.PlayBtn, Secondary Actions: Raise
+	35 button Capture the Forward, Description: Capture / Forward, ID: PtApp.CAppWindowBase.centralwidget.m_RSFrame.CSimulationToolbar.ForwardBtn, Secondary Actions: Raise
+	36 checkbox Show Event List, Description: Event List, Value: 1, ID: PtApp.CAppWindowBase.centralwidget.m_RSFrame.CSimulationToolbar.EventListBtn, Secondary Actions: Raise
+	37 checkbox Realtime Mode, Description: Realtime Mode (Shift+R), Value: 0, ID: PtApp.CAppWindowBase.centralwidget.m_RSFrame.m_realtimeSwitch, Secondary Actions: Raise
+	38 checkbox Simulation Mode, Description: Simulation Mode (Shift+S), Value: 1, ID: PtApp.CAppWindowBase.centralwidget.m_RSFrame.m_simulationSwitch, Secondary Actions: Raise
+	39 split group PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter
+		40 button Scenario Information, Description: Description of what this scenario represents., Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.UserCreatedPDU.m_scenarioInfoBtn
+		41 combo box Scenario 0, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.UserCreatedPDU.m_scenarioComboBox
+			42 text field (settable) Value: Scenario 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.UserCreatedPDU.m_scenarioComboBox.QLineEdit
+		43 button New, Description: Add another scenario., Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.UserCreatedPDU.NewScenarioBtn
+		44 button Delete, Description: Delete the current scenario including the user PDUs, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.UserCreatedPDU.DeleteScenarioBtn
+		45 checkbox Toggle PDU list window, Description: Expands the PDU list table into a dock window, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.UserCreatedPDU.OpenListWindowBtn
+		46 outline List of user packets
+			47 column List of user packets
+			48 column List of user packets
+			49 column List of user packets
+			50 column List of user packets
+			51 column List of user packets
+			52 column List of user packets
+			53 column List of user packets
+			54 column List of user packets
+			55 column List of user packets
+			56 column List of user packets
+			57 column List of user packets
+		58 checkbox User Created PDU toggle, Value: 1, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_expandPacketWindowBtn, Secondary Actions: Raise
+		59 checkbox Network Devices, Description: Network Devices Ctrl+Alt+R, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceTypesBox.group_Network_Devices
+		60 checkbox End Devices, Description: End Devices Ctrl+Alt+V, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceTypesBox.group_End_Devices
+		61 checkbox Components, Description: Components Ctrl+Alt+B, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceTypesBox.group_Components
+		62 checkbox Connections, Description: Connections Ctrl+Alt+O, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceTypesBox.group_Connections
+		63 checkbox Miscellaneous, Description: Miscellaneous Ctrl+Alt+E, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceTypesBox.group_Miscellaneous
+		64 checkbox Multiuser Connection, Description: Multiuser Connection Ctrl+Alt+M, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceTypesBox.group_Multiuser_Connection
+		65 checkbox Legacy, Description: Legacy Devices, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceTypesBox.group_Legacy
+		66 image PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceTypesBox.QLabel
+		67 text field (settable) Search for device, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceTypesBox.CDeviceTypesBox_SearchInput
+		68 checkbox Routers, Description: Routers Ctrl+Alt+R, Value: 0, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceTypesBox.type_Routers
+		69 checkbox Switches, Description: Switches Ctrl+Alt+S, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceTypesBox.type_Switches
+		70 checkbox Hubs, Description: Hubs Ctrl+Alt+U, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceTypesBox.type_Hubs
+		71 checkbox Wireless Devices, Description: Wireless Devices Ctrl+Alt+W, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceTypesBox.type_Wireless_Devices
+		72 checkbox Security, Description: Security Ctrl+Alt+C, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceTypesBox.type_Security
+		73 checkbox WAN Emulation, Description: WAN Emulation Ctrl+Alt+N, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceTypesBox.type_WAN_Emulation
+		74 text Value:  (Select a Device to Drag and Drop to the Workspace) , ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.CDeviceLabel
+		75 checkbox 1841, Description: stock, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_1841
+		76 checkbox 1941, Description: stock, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_1941
+		77 checkbox 2620XM, Description: stock, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_2620XM
+		78 checkbox 2621XM, Description: stock, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_2621XM
+		79 checkbox 2901, Description: stock, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_2901
+		80 checkbox 2911, Description: stock, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_2911
+		81 checkbox 819HG-4G-IOX, Description: stock, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_819HG_4G_IOX
+		82 checkbox 819HGW, Description: stock, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_819HGW
+		83 checkbox 829, Description: stock, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_829
+		84 checkbox CGR1240, Description: stock, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_CGR1240
+		85 checkbox IR1101, Description: stock, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_IR1101
+		86 checkbox IR8340, Description: stock, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_IR8340
+		87 checkbox ISR4321, Description: stock, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_ISR4321
+		88 checkbox ISR4331, Description: stock, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_ISR4331
+		89 checkbox PT8200, Description: stock, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_PT8200
+		90 checkbox Router-PT, Description: stock, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_Router_PT
+		91 checkbox Router-PT-Empty, Description: stock, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_Router_PT_Empty
+		92 checkbox 2811 IOS15, Description: custom, Value: 0, Secondary Actions: Raise, ID: PtApp.CAppWindowBase.centralwidget.m_pNetWorkCompBoxFrame.m_bottomSplitter.m_pNetWorkCompBox.CDeviceSpecificBox.scroll_Routers.qt_scrollarea_viewport.scroll_frame_Routers.device_Routers_2811
+	93 button New, ID: PtApp.CAppWindowBase.m_pToolBar.QToolButton, Secondary Actions: Raise
+	94 button Open, ID: PtApp.CAppWindowBase.m_pToolBar.QToolButton, Secondary Actions: Raise
+	95 button Save, ID: PtApp.CAppWindowBase.m_pToolBar.QToolButton, Secondary Actions: Raise
+	96 button Print, ID: PtApp.CAppWindowBase.m_pToolBar.QToolButton, Secondary Actions: Raise
+	97 button Network Information, ID: PtApp.CAppWindowBase.m_pToolBar.QToolButton, Secondary Actions: Raise
+	98 button User Profile, ID: PtApp.CAppWindowBase.m_pToolBar.QToolButton, Secondary Actions: Raise, Description: Set the name, email, and additional information to be used for submission of this file. Profile is unrelated to your login information and status.
+	99 button Activity Wizard, Description: Open the Activity Wizard to create your own PKA activities., ID: PtApp.CAppWindowBase.m_pToolBar.QToolButton, Secondary Actions: Raise
+	100 button Copy, ID: PtApp.CAppWindowBase.m_pToolBar.QToolButton, Secondary Actions: Raise
+	101 button Paste, ID: PtApp.CAppWindowBase.m_pToolBar.QToolButton, Secondary Actions: Raise
+	102 button Undo, ID: PtApp.CAppWindowBase.m_pToolBar.QToolButton, Secondary Actions: Raise
+	103 button Redo, ID: PtApp.CAppWindowBase.m_pToolBar.QToolButton, Secondary Actions: Raise
+	104 button Zoom In, ID: PtApp.CAppWindowBase.m_pToolBar.QToolButton, Secondary Actions: Raise
+	105 button Zoom Reset, ID: PtApp.CAppWindowBase.m_pToolBar.QToolButton, Secondary Actions: Raise
+	106 button Zoom Out, ID: PtApp.CAppWindowBase.m_pToolBar.QToolButton, Secondary Actions: Raise
+	107 button View the entire workspace., ID: PtApp.CAppWindowBase.m_pToolBar.Show Viewport, Secondary Actions: Raise
+	108 button View the workspace as a tabular list of devices and links., ID: PtApp.CAppWindowBase.m_pToolBar.Show Workspace List, Secondary Actions: Raise
+	109 button View all commands entered in this file., ID: PtApp.CAppWindowBase.m_pToolBar.View Command Log, Secondary Actions: Raise
+	110 button Custom Devices Dialog, Description: Customize any existing device model with pre-installed modules and IOS versions., ID: PtApp.CAppWindowBase.m_pToolBar.QToolButton, Secondary Actions: Raise
+	111 button Cluster Associations Dialog, Description: Associate Logical Workspace clusters to Physical Workspace containers., ID: PtApp.CAppWindowBase.m_pToolBar.QToolButton, Secondary Actions: Raise
+	112 button Contents, ID: PtApp.CAppWindowBase.m_pToolBar.QToolButton, Secondary Actions: Raise
+	113 checkbox Select (Esc), Value: 1, ID: PtApp.CAppWindowBase.m_pPlToolBar.QToolButton, Secondary Actions: Raise
+	114 checkbox Inspect (I), Value: 0, ID: PtApp.CAppWindowBase.m_pPlToolBar.QToolButton, Secondary Actions: Raise
+	115 checkbox Delete (Del), Value: 0, ID: PtApp.CAppWindowBase.m_pPlToolBar.QToolButton, Secondary Actions: Raise
+	116 checkbox Resize (Alt+R), Value: 0, ID: PtApp.CAppWindowBase.m_pPlToolBar.QToolButton, Secondary Actions: Raise
+	117 checkbox Place Note (N), Value: 0, ID: PtApp.CAppWindowBase.m_pPlToolBar.QToolButton, Secondary Actions: Raise
+	118 checkbox Draw Line (L), Value: 0, ID: PtApp.CAppWindowBase.m_pPlToolBar.QToolButton, Secondary Actions: Raise
+	119 checkbox Draw Rectangle (R), Value: 0, ID: PtApp.CAppWindowBase.m_pPlToolBar.QToolButton, Secondary Actions: Raise
+	120 checkbox Draw Ellipse (E), Value: 0, ID: PtApp.CAppWindowBase.m_pPlToolBar.QToolButton, Secondary Actions: Raise
+	121 checkbox Draw Freeform (F), Value: 0, ID: PtApp.CAppWindowBase.m_pPlToolBar.QToolButton, Secondary Actions: Raise
+	122 checkbox Add Simple PDU (P), Value: 0, ID: PtApp.CAppWindowBase.m_pPlToolBar.QToolButton, Secondary Actions: Raise
+	123 checkbox Add Complex PDU (C), Value: 0, ID: PtApp.CAppWindowBase.m_pPlToolBar.QToolButton, Secondary Actions: Raise
+	124 close button
+	125 full screen button Help: this button also has an action to zoom the window, Secondary Actions: zoom the window
+	126 minimize button
+	127 text Cisco Packet Tracer - /Users/alexandr/PyCharmMiscProject/DownloadsControl/lab_work/Setevye_Tehnologii_Codex/packet-tracer/verified_inputs/03e_STP_loop_Isolated.pkt
+128 menu bar
+	129 Cisco Packet Tracer
+	130 File
+	131 Edit
+	132 Options
+	133 View
+	134 Tools
+	135 Extensions
+	136 Window
+	137 Help
+
+The focused UI element is 0 standard window Secondary Actions: Raise, Cisco Packet Tracer - /Users/alexandr/PyCharmMiscProject/DownloadsControl/lab_work/Setevye_Tehnologii_Codex/packet-tracer/verified_inputs/03e_STP_loop_Isolated.pkt

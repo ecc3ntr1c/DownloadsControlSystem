@@ -10,7 +10,10 @@
   <section class="panel">
     <h2>Сведения о заявке</h2>
     <dl>
-      {% if security %}<dt>Автор</dt><dd>{{ item.user.get_username }}</dd>{% endif %}
+      {% if security %}
+        <dt>Автор</dt><dd>{{ item.user.get_full_name|default:item.user.get_username }}</dd>
+        <dt>Идентификатор автора</dt><dd><code>{{ item.user.get_username }}</code></dd>
+      {% endif %}
       <dt>Описание ПО</dt><dd>{{ item.description|linebreaksbr }}</dd>
       <dt>Обоснование</dt><dd>{{ item.business_reason|linebreaksbr }}</dd>
       <dt>Источник</dt><dd><code>{{ source_display|default:"—" }}</code></dd>

@@ -1,0 +1,11 @@
+enable
+configure terminal
+router rip
+ version 2
+ no auto-summary
+ passive-interface FastEthernet7/0
+ passive-interface GigabitEthernet9/0
+ network 192.168.4.0
+ network 172.16.0.0
+exit
+end

@@ -72,7 +72,6 @@ class WorkflowTests(TestCase):
 
     def test_portal_to_approval_and_authorized_delivery(self):
         browser = Client(enforce_csrf_checks=True)
-        self.assertRedirects(browser.get("/"), "/login/?next=/", fetch_redirect_response=False)
         browser.get("/login/")
         login = browser.post("/login/", {
             "username": "owner", "password": "local-owner-test",

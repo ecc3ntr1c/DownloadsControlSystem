@@ -1,0 +1,606 @@
+{
+  "packet_tracer_version": "9.0.1",
+  "screenshots_dir": "Setevye_Tehnologii_Codex/screenshots",
+  "labs": {
+    "1": {
+      "screenshots": [
+        {
+          "file": "01_topology_report.png",
+          "slot": "topology",
+          "caption": "Топология двух подсетей в рабочей области Cisco Packet Tracer",
+          "max_height_cm": 11.4
+        },
+        {
+          "file": "01_PC1_IP_report.png",
+          "slot": "configuration",
+          "caption": "Статические параметры IPv4 на PC1",
+          "max_height_cm": 11.4
+        },
+        {
+          "file": "01_PC5_IP_report.png",
+          "slot": "configuration",
+          "caption": "Статические параметры IPv4 на PC5",
+          "max_height_cm": 11.4
+        },
+        {
+          "file": "01_R0_interfaces_report.png",
+          "slot": "configuration",
+          "caption": "Адреса и состояние интерфейсов Router0",
+          "max_height_cm": 11.4,
+          "note": "FastEthernet0/0 и FastEthernet0/1 находятся в состоянии up/up; адреса соответствуют шлюзам двух подсетей."
+        },
+        {
+          "file": "01_PC1_ping_report.png",
+          "slot": "checks",
+          "caption": "Проверка PC1 → PC3 внутри сети 192.168.4.0/24",
+          "max_height_cm": 11.4,
+          "note": "Получены четыре ответа из четырёх, потери 0%."
+        },
+        {
+          "file": "01_PC1_ping_remote_report.png",
+          "slot": "checks",
+          "caption": "Повторная проверка PC1 → PC5 между двумя подсетями",
+          "note": "На адрес 192.168.5.1 получены четыре ответа из четырёх; потери 0%."
+        },
+        {
+          "file": "01_PDU_report.png",
+          "slot": "checks",
+          "caption": "Результаты Simple PDU внутри и между подсетями",
+          "note": "Обе записи ICMP — PC1 → PC3 и PC1 → PC5 — имеют статус Successful."
+        }
+      ],
+      "observations": [
+        "На PC1 заданы адрес 192.168.4.1/24 и шлюз 192.168.4.254; на PC5 — 192.168.5.1/24 и шлюз 192.168.5.254. Оба интерфейса Router0 активны.",
+        "Внутрисегментный ping PC1 → PC3 завершился без потерь. В первой межсегментной проверке PC1 → PC5 один запрос завершился по тайм-ауту; повторная проверка дала четыре ответа из четырёх. Значение TTL в ответах PC3 равно 128, PC5 — 127, что согласуется с прохождением межсегментного ответа через маршрутизатор.",
+        "Результаты Simple PDU подтверждают оба проверенных направления: внутри первой подсети и из первой подсети во вторую."
+      ],
+      "results": {
+        "headers": [
+          "Проверка",
+          "Адрес назначения",
+          "Получено",
+          "Потери"
+        ],
+        "rows": [
+          [
+            "PC1 → PC3",
+            "192.168.4.3",
+            "4 из 4",
+            "0%"
+          ],
+          [
+            "PC1 → PC5, повтор",
+            "192.168.5.1",
+            "4 из 4",
+            "0%"
+          ]
+        ],
+        "widths": [
+          5.5,
+          4.7,
+          2.6,
+          2.6
+        ]
+      },
+      "conclusion": "Настроена сеть из двух подсетей. Проверки подтвердили передачу ICMP внутри LAN и между LAN через Router0 при корректно заданных шлюзах.",
+      "complete": true
+    },
+    "2": {
+      "screenshots": [
+        {
+          "file": "02a_topology_report.png",
+          "slot": "topology",
+          "caption": "Исходная сеть трёх этажей до подключения маршрутизатора"
+        },
+        {
+          "file": "02a_PC11_IP_report.png",
+          "slot": "access",
+          "caption": "Адрес PC11 в VLAN 10 до подключения маршрутизатора"
+        },
+        {
+          "file": "02a_S0_vlan_report.png",
+          "slot": "access",
+          "caption": "Распределение access-портов Switch0 по VLAN",
+          "note": "Fa0/1 относится к VLAN 10, Fa0/2 и Fa0/3 — к VLAN 20; Fa0/4 остаётся в VLAN 1."
+        },
+        {
+          "file": "02a_S0_access_config_report.png",
+          "slot": "access",
+          "caption": "Конфигурация Fa0/1–Fa0/4 на Switch0",
+          "width_cm": 10.5
+        },
+        {
+          "file": "02a_S0_trunk_report.png",
+          "slot": "trunk",
+          "caption": "Транк Switch0 Gi0/1 с разрешёнными VLAN 10 и 20"
+        },
+        {
+          "file": "02a_S1_trunk_report.png",
+          "slot": "trunk",
+          "caption": "Два транка Switch1 и исходные списки VLAN"
+        },
+        {
+          "file": "02a_S2_trunk_report.png",
+          "slot": "trunk",
+          "caption": "Транк Switch2 Gi0/1 с разрешёнными VLAN 10 и 30"
+        },
+        {
+          "file": "02a_PDU_isolation_report.png",
+          "slot": "isolation",
+          "caption": "Проверка доступности внутри VLAN 10 и изоляции разных VLAN",
+          "note": "PC11 → PC21 и PC11 → PC31 имеют статус Successful. Для PC11 → PC12 и PC11 → PC34 зафиксирован Failed, поскольку маршрутизация между VLAN ещё не настроена."
+        },
+        {
+          "file": "02b_topology_report.png",
+          "slot": "routing",
+          "caption": "Топология после добавления маршрутизатора Cisco 2901"
+        },
+        {
+          "file": "02b_PDU_routing_report.png",
+          "slot": "checks",
+          "caption": "Проверки после настройки маршрутизации VLAN 10, 20 и 30",
+          "note": "Первые попытки PC11 → PC12 и PC11 → PC34 завершились Failed; повторные — Successful. PC14 → PC32 остаётся недоступным, поскольку VLAN 1 ещё не разрешена на межкоммутаторных транках."
+        },
+        {
+          "file": "02c_R0_native_report.png",
+          "slot": "routing",
+          "caption": "Native-подинтерфейс VLAN 1 и подинтерфейсы VLAN 10, 20 и 30 на Router0",
+          "width_cm": 12.5
+        },
+        {
+          "file": "02c_R0_interfaces_report.png",
+          "slot": "routing",
+          "caption": "Активный подинтерфейс Gi0/0.1 со шлюзом VLAN 1"
+        },
+        {
+          "file": "02c_S0_vlan_details_report.png",
+          "slot": "access",
+          "caption": "Полный вывод show vlan на Switch0",
+          "max_height_cm": 15.8
+        },
+        {
+          "file": "02c_S1_vlan_report.png",
+          "slot": "access",
+          "caption": "Распределение access-портов Switch1 по VLAN"
+        },
+        {
+          "file": "02c_S0_trunk_report.png",
+          "slot": "routing",
+          "caption": "Разрешение VLAN 1 на транке Switch0"
+        },
+        {
+          "file": "02c_S1_trunk_report.png",
+          "slot": "routing",
+          "caption": "Итоговые списки разрешённых VLAN на транках Switch1"
+        },
+        {
+          "file": "02c_S2_vlan_report.png",
+          "slot": "access",
+          "caption": "Распределение access-портов Switch2 по VLAN"
+        },
+        {
+          "file": "02c_S2_trunk_report.png",
+          "slot": "routing",
+          "caption": "VLAN 1, 10, 20 и 30 на обоих транках Switch2"
+        },
+        {
+          "file": "02c_PDU_native_report.png",
+          "slot": "checks",
+          "caption": "Доступность VLAN 1 после её разрешения на транках и настройки шлюза",
+          "note": "PC14 → PC32 проходит успешно. Первая попытка PC14 → PC11 имеет статус Failed, повторная — Successful."
+        },
+        {
+          "file": "02c_PDU_all12_report.png",
+          "slot": "checks",
+          "caption": "Итоговая проверка PC11 со всеми остальными 12 ПК",
+          "note": "Подтверждены успешные ICMP-проверки всех 12 направлений. Проверены ПК VLAN 1, 10, 20 и 30 на всех трёх этажах."
+        }
+      ],
+      "slot_observations": {
+        "trunk": [
+          "На исходном этапе show interfaces trunk подтверждает режим trunking и инкапсуляцию 802.1Q. VLAN 10 проходит через оба межкоммутаторных соединения; VLAN 20 разрешена между Switch0 и Switch1, VLAN 30 — между Switch1 и Switch2."
+        ],
+        "access": [
+          "Команды show vlan и show vlan brief подтверждают назначение access-портов всех трёх коммутаторов. Полный вывод show vlan дополнительно содержит тип VLAN, SAID и MTU; для Ethernet VLAN 1, 10, 20 и 30 указан MTU 1500."
+        ]
+      },
+      "observations": [
+        "До подключения маршрутизатора проверенные ПК VLAN 10 на разных этажах доступны друг другу. Попытки ICMP из VLAN 10 в VLAN 20 и VLAN 30 завершаются Failed, что соответствует отсутствию межсетевой маршрутизации.",
+        "После настройки Router-on-a-stick повторные ICMP-проверки PC11 → PC12 и PC11 → PC34 стали успешными. Добавление VLAN 1 в списки транков и подинтерфейса Gi0/0.1 обеспечило также связь PC14 → PC32 и PC14 → PC11.",
+        "В итоговом списке Simple PDU подтверждены 12 успешных направлений из PC11 ко всем остальным ПК: PC12, PC13, PC14, PC21–PC25, PC31, PC32, PC34 и PC35. Итоговые транки находятся в состоянии trunking, а необходимые VLAN — в forwarding."
+      ],
+      "conclusion": "VLAN разделили сеть на широковещательные домены, а транки перенесли требуемые VLAN между этажами. Подинтерфейсы Router0 с 802.1Q и назначенные шлюзы обеспечили межсетевой обмен. После включения VLAN 1 итоговая проверка из PC11 подтвердила доступность всех остальных 12 ПК.",
+      "complete": true,
+      "results": {
+        "headers": [
+          "Этап",
+          "Проверки",
+          "Результат"
+        ],
+        "rows": [
+          [
+            "До маршрутизации",
+            "PC11 → PC21 и PC31",
+            "2 Successful"
+          ],
+          [
+            "До маршрутизации",
+            "PC11 → PC12 и PC34",
+            "2 Failed"
+          ],
+          [
+            "Router-on-a-stick",
+            "PC11 → PC12 и PC34, повтор",
+            "2 Successful"
+          ],
+          [
+            "После добавления VLAN 1",
+            "PC14 → PC32 и PC11, повтор",
+            "2 Successful"
+          ],
+          [
+            "Итоговая проверка",
+            "PC11 → все остальные 12 ПК",
+            "Все 12 направлений успешны"
+          ]
+        ],
+        "widths": [
+          4.5,
+          8,
+          4.5
+        ]
+      }
+    },
+    "3": {
+      "screenshots": [
+        {
+          "file": "03a_topology_report.png",
+          "slot": "topology",
+          "caption": "Исходная треугольная топология STP в Cisco Packet Tracer"
+        },
+        {
+          "file": "03a_S0_stp_report.png",
+          "slot": "stp_initial",
+          "caption": "Switch0 — корневой мост VLAN 1 в исходной топологии"
+        },
+        {
+          "file": "03a_S1_stp_report.png",
+          "slot": "stp_initial",
+          "caption": "Корневой порт Fa0/4 на Switch1 в исходной топологии"
+        },
+        {
+          "file": "03a_S2_stp_report.png",
+          "slot": "stp_initial",
+          "caption": "Корневой Fa0/2 и заблокированный Fa0/5 на Switch2"
+        },
+        {
+          "file": "03b_S2_root_report.png",
+          "slot": "stp_root",
+          "caption": "Назначение Switch2 корнем командой root primary"
+        },
+        {
+          "file": "03b_S0_stp_report.png",
+          "slot": "stp_root",
+          "caption": "Switch0 после выбора Switch2 корневым мостом"
+        },
+        {
+          "file": "03b_S1_stp_report.png",
+          "slot": "stp_root",
+          "caption": "Перенос блокировки на Fa0/4 Switch1 после смены корня"
+        },
+        {
+          "file": "03c_topology_report.png",
+          "slot": "lacp",
+          "caption": "Два физических соединения Switch0–Switch2 для EtherChannel"
+        },
+        {
+          "file": "03c_S0_stp_report.png",
+          "slot": "lacp",
+          "caption": "EtherChannel и корневой Port-channel1 на Switch0",
+          "max_height_cm": 15.8
+        },
+        {
+          "file": "03c_S2_etherchannel_report.png",
+          "slot": "lacp",
+          "caption": "LACP на Switch2: оба физических порта включены в Po1"
+        },
+        {
+          "file": "03d_S0_linkdown_report.png",
+          "slot": "failure",
+          "caption": "Отключение Fa0/3 и сохранение работающего Port-channel1",
+          "max_height_cm": 12.1
+        },
+        {
+          "file": "03d_S0_stp_report.png",
+          "slot": "failure",
+          "caption": "STP на Switch0 после отказа одного участника EtherChannel"
+        },
+        {
+          "file": "03d_PC0_ping_report.png",
+          "slot": "failure",
+          "caption": "Проверки PC0 → PC2 до и после отключения Fa0/3",
+          "note": "Верхняя проверка выполнена при двух активных участниках EtherChannel, нижняя — после shutdown Fa0/3. В обеих получены четыре ответа из четырёх, потери 0%.",
+          "width_cm": 15.2,
+          "max_height_cm": 13.2
+        },
+        {
+          "file": "03e_S0_stp_off_report.png",
+          "slot": "storm",
+          "caption": "Отсутствие экземпляра STP VLAN 1 на Switch0",
+          "width_cm": 10.2
+        },
+        {
+          "file": "03e_S1_stp_off_report.png",
+          "slot": "storm",
+          "caption": "Отсутствие экземпляра STP VLAN 1 на Switch1",
+          "width_cm": 10.2
+        },
+        {
+          "file": "03e_S2_stp_off_report.png",
+          "slot": "storm",
+          "caption": "Отсутствие экземпляра STP VLAN 1 на Switch2",
+          "width_cm": 10.2
+        }
+      ],
+      "slot_observations": {
+        "stp_initial": [
+          "Исходный корень VLAN 1 — Switch0 с адресом моста 0212.0000.2001. Приоритет всех мостов равен 32769 (32768 + VLAN ID 1), поэтому выбор определил наименьший MAC-адрес. Bridge ID Switch1 содержит 0212.0000.2035, Switch2 — 0212.0000.2069. На Switch2 порт Fa0/5 имеет роль Altn и состояние BLK."
+        ],
+        "stp_root": [
+          "После команды spanning-tree vlan 1 root primary на Switch2 его базовый приоритет стал 24576, а отображаемый приоритет Bridge ID — 24577 с учётом VLAN 1. В выводе появилась строка This bridge is the root; Fa0/2 и Fa0/5 стали назначенными портами в состоянии FWD.",
+          "На Switch0 корневым стал Fa0/2, а Fa0/4 сохранил Desg FWD. На Switch1 корневым стал Fa0/5, а Fa0/4 перешёл в Altn BLK. Таким образом, после переназначения корня активное дерево изменилось."
+        ],
+        "lacp": [
+          "На обоих концах show etherchannel summary показывает Po1(SU), протокол LACP и участников Fa0/2(P), Fa0/3(P). Флаг S означает канал второго уровня, U — использование канала, P — включение физического порта в агрегат. На Switch0 STP рассматривает Po1 как единый корневой порт: Root FWD, стоимость 12 вместо 19 у отдельного FastEthernet."
+        ],
+        "failure": [
+          "После shutdown на Switch0 Fa0/3 помечен D, а Fa0/2 остаётся P. Логический канал сохраняет Po1(SU) и роль Root FWD. В наблюдаемом выводе Packet Tracer стоимость Po1 остаётся равной 12; снижение фактической пропускной способности не сопровождалось изменением этой отображаемой стоимости. Проверка ping после отключения участника завершилась с 0% потерь."
+        ],
+        "storm": [
+          "Команда show spanning-tree vlan 1 на каждом из трёх коммутаторов возвращает No spanning tree instance exists. Таким образом, на этом этапе STP не блокирует избыточные пути треугольной топологии.",
+          "В режиме Simulation после отправки тестового пакета Packet Tracer перестал отвечать. Журнал повторных пересылок зафиксировать не удалось."
+        ]
+      },
+      "observations": [],
+      "conclusion": "STP блокировал избыточный путь и пересчитал дерево после смены корневого коммутатора. Канал LACP сохранил связь при отключении одного физического порта. Отключение STP подтверждено на всех трёх коммутаторах.",
+      "complete": false,
+      "slot_tables": {
+        "stp_initial": [
+          {
+            "headers": [
+              "Коммутатор",
+              "Порт к коммутатору",
+              "Роль",
+              "Состояние",
+              "Стоимость"
+            ],
+            "rows": [
+              [
+                "Switch0",
+                "Fa0/2",
+                "Desg",
+                "FWD",
+                19
+              ],
+              [
+                "Switch0",
+                "Fa0/4",
+                "Desg",
+                "FWD",
+                19
+              ],
+              [
+                "Switch1",
+                "Fa0/4",
+                "Root",
+                "FWD",
+                19
+              ],
+              [
+                "Switch1",
+                "Fa0/5",
+                "Desg",
+                "FWD",
+                19
+              ],
+              [
+                "Switch2",
+                "Fa0/2",
+                "Root",
+                "FWD",
+                19
+              ],
+              [
+                "Switch2",
+                "Fa0/5",
+                "Altn",
+                "BLK",
+                19
+              ]
+            ],
+            "widths": [
+              3.4,
+              5,
+              2,
+              2.8,
+              2.8
+            ]
+          }
+        ]
+      }
+    },
+    "4": {
+      "screenshots": [
+        {
+          "file": "04_topology_report.png",
+          "slot": "topology",
+          "caption": "Три LAN и треугольник маршрутизаторов в Cisco Packet Tracer",
+          "max_height_cm": 12.2
+        },
+        {
+          "file": "04_R0_interfaces_dhcp_report.png",
+          "slot": "interfaces",
+          "caption": "Активные интерфейсы Router0 и аренда DHCP для LAN1",
+          "max_height_cm": 11.4
+        },
+        {
+          "file": "04_PC1_dhcp_static_ping_report.png",
+          "slot": "dhcp",
+          "caption": "Адрес 192.168.4.2/27 и шлюз, полученные PC1",
+          "max_height_cm": 11.4
+        },
+        {
+          "file": "04_PC3_dhcp_static_ping_report.png",
+          "slot": "dhcp",
+          "caption": "Адрес 192.168.2.2/23 и шлюз, полученные PC3",
+          "max_height_cm": 11.4
+        },
+        {
+          "file": "04_PC5_dhcp_report.png",
+          "slot": "dhcp",
+          "caption": "Адрес 192.168.0.2/23 и шлюз, полученные PC5",
+          "max_height_cm": 11.4
+        },
+        {
+          "file": "04_R0_static_report.png",
+          "slot": "static",
+          "caption": "Статический маршрут Router0 в LAN2",
+          "max_height_cm": 11.4
+        },
+        {
+          "file": "04_R1_static_dhcp_report.png",
+          "slot": "static",
+          "caption": "Интерфейсы, аренда DHCP и статические маршруты Router1",
+          "max_height_cm": 12.1
+        },
+        {
+          "file": "04_R2_static_dhcp_report.png",
+          "slot": "static",
+          "caption": "Аренда DHCP и статический маршрут Router2 в LAN2",
+          "max_height_cm": 11.4
+        },
+        {
+          "file": "04_R0_rip_protocols_report.png",
+          "slot": "rip",
+          "caption": "Параметры RIPv2 на Router0",
+          "max_height_cm": 11.4,
+          "note": "Используется версия 2; автоматическое суммирование отключено. Обновления передаются через GigabitEthernet8/0, источник маршрутной информации — 172.16.3.2."
+        },
+        {
+          "file": "04_R0_rip_routes_report.png",
+          "slot": "rip",
+          "caption": "Таблица Router0 после обмена маршрутами RIPv2",
+          "max_height_cm": 11.4,
+          "note": "Маршрут к LAN3 192.168.0.0/23 имеет код R, запись [120/1] и следующий узел 172.16.3.2."
+        },
+        {
+          "file": "04_R2_rip_routes_report.png",
+          "slot": "rip",
+          "caption": "Таблица Router2 после обмена маршрутами RIPv2",
+          "max_height_cm": 11.4,
+          "note": "Обратный маршрут к LAN1 192.168.4.0/27 имеет код R, запись [120/1] и следующий узел 172.16.3.1."
+        },
+        {
+          "file": "04_PC1_ping_final_report.png",
+          "slot": "checks",
+          "caption": "Повторная проверка PC1 → PC2",
+          "max_height_cm": 11.4,
+          "note": "Получены 4 ответа от 192.168.3.254, потери 0%."
+        },
+        {
+          "file": "04_PC3_ping_final_report.png",
+          "slot": "checks",
+          "caption": "Повторная проверка PC3 → PC4",
+          "max_height_cm": 11.4,
+          "note": "Получены 4 ответа от 192.168.1.254, потери 0%."
+        },
+        {
+          "file": "04_PC0_rip_ping_report.png",
+          "slot": "checks",
+          "caption": "Успешная проверка PC0 → PC4 через сеть с RIPv2",
+          "max_height_cm": 11.4,
+          "note": "На запросы к 192.168.1.254 получены четыре ответа, потери 0%."
+        }
+      ],
+      "slot_tables": {
+        "dhcp": [
+          {
+            "headers": [
+              "Клиент",
+              "Выданный IPv4",
+              "Маска",
+              "Шлюз"
+            ],
+            "rows": [
+              [
+                "PC1",
+                "192.168.4.2",
+                "255.255.255.224",
+                "192.168.4.1"
+              ],
+              [
+                "PC3",
+                "192.168.2.2",
+                "255.255.254.0",
+                "192.168.2.1"
+              ],
+              [
+                "PC5",
+                "192.168.0.2",
+                "255.255.254.0",
+                "192.168.0.1"
+              ]
+            ],
+            "widths": [
+              1.4,
+              4.3,
+              4.8,
+              4.3
+            ]
+          }
+        ]
+      },
+      "observations": [
+        "Все три DHCP-клиента получили адреса своих подсетей с правильными масками и шлюзами. В таблицах DHCP маршрутизаторов присутствуют автоматические аренды 192.168.4.2, 192.168.2.2 и 192.168.0.2. Они не совпадают с исключёнными адресами шлюзов и статических ПК.",
+        "В статических таблицах Router0 и Router2 присутствуют пути к LAN2 через Router1. На Router1 присутствуют оба обратных маршрута к LAN1 и LAN3. Повторные проверки PC1 → PC2 и PC3 → PC4 завершились без потерь.",
+        "После включения RIPv2 Router0 изучил LAN3 через 172.16.3.2, а Router2 изучил LAN1 через 172.16.3.1. У обоих маршрутов метрика равна одному переходу. Статические маршруты к LAN2 сохранились. Проверка PC0 → PC4 подтвердила доступность между LAN1 и LAN3."
+      ],
+      "results": {
+        "headers": [
+          "Проверка",
+          "Адрес назначения",
+          "Маршрутизация",
+          "Результат"
+        ],
+        "rows": [
+          [
+            "PC1 → PC2, повтор",
+            "192.168.3.254",
+            "Статическая",
+            "4 из 4; 0% потерь"
+          ],
+          [
+            "PC3 → PC4, повтор",
+            "192.168.1.254",
+            "Статическая",
+            "4 из 4; 0% потерь"
+          ],
+          [
+            "PC0 → PC4",
+            "192.168.1.254",
+            "RIPv2",
+            "4 из 4; 0% потерь"
+          ]
+        ],
+        "widths": [
+          4.5,
+          4.5,
+          3.3,
+          4.1
+        ]
+      },
+      "conclusion": "Адресное пространство разделено на подсети /27, /23 и /23 в соответствии с вариантом. DHCP автоматически выдал параметры клиентам, статические маршруты обеспечили связь соседних LAN, а RIPv2 — связь LAN1 и LAN3 через непосредственное соединение Router0–Router2.",
+      "complete": true
+    }
+  }
+}

@@ -36,6 +36,15 @@ def login(client, user, password):
     assert response.status_code == 302, response.status_code
 
 
+def enter_portal(client, name):
+    response = client.get("/welcome/")
+    response.raise_for_status()
+    response = client.post("/welcome/", data={
+        "name": name, "csrfmiddlewaretoken": client.cookies["csrftoken"],
+    })
+    assert response.status_code == 302 and response.headers["Location"] == "/", response.status_code
+
+
 def post_json(client, path, body, expected):
     response = client.post(path, json=body, headers={"X-CSRFToken": client.cookies["csrftoken"]})
     assert response.status_code == expected, f"{path}: {response.status_code} != {expected}"
@@ -52,9 +61,7 @@ def check():
     password = secrets.token_urlsafe(32)
     suffix = secrets.token_hex(4)
     users = get_user_model().objects
-    owner = users.create_user(f"smoke-owner-{suffix}", password=password)
     officer = users.create_user(f"smoke-officer-{suffix}", password=password)
-    other = users.create_user(f"smoke-other-{suffix}", password=password)
     officer.groups.add(Group.objects.get(name=SOFTWARE_CONTROL_SECURITY_GROUP))
 
     policy = DownloadsPolicy.objects.get(is_active=True)
@@ -72,14 +79,19 @@ def check():
     ):
         assert employee.get("/readyz/").json() == {"status": "ready"}
         assert employee.get("/static/downloadscontrol/portal.css").status_code == 200
-        for client, user in [(employee, owner), (security, officer), (another, other)]:
-            login(client, user, password)
+        name = f"Участник проверки {suffix}"
+        enter_portal(employee, name)
+        enter_portal(another, name)
+        login(security, officer, password)
         assert employee.get("/security/").status_code == 403
         payload = post_json(employee, "/api/v1/requests/create/", {
             "source_url": "http://fixture.test:8000/package.txt", "description": "Контрольный пакет",
             "business_reason": "Локальная проверка",
         }, 201)
         request_id = payload["id"]
+        owner = SoftwareRequest.objects.get(pk=request_id).user
+        assert owner.get_full_name() == name and not owner.has_usable_password()
+        assert another.get(f"/requests/{request_id}/").status_code == 404
         assert payload["download_url"] is None
         print(f"Заявка {request_id} принята через Nginx, ожидание Celery и ClamAV", flush=True)
 
@@ -94,6 +106,7 @@ def check():
                 raise AssertionError(f"Заявка не обработана: {review['scan_status']}, {review['processing_error']}")
             time.sleep(1)
         assert review["scan_status"] == "SCAN_COMPLETED", review["processing_error"]
+        assert name in security.get(f"/security/{request_id}/").text
         assert review["scan"]["provider"] == "CLAMAV" and review["scan"]["verdict"] == "CLEAN", review["scan"]
         assert review["scan"]["file_sha256"] == hashlib.sha256(expected_bytes).hexdigest()
         file_id = review["file"]["id"]

@@ -1,0 +1,6 @@
+enable
+configure terminal
+interface FastEthernet0/3
+ no shutdown
+exit
+end

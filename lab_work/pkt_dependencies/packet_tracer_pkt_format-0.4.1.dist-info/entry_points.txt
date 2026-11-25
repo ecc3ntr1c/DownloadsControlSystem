@@ -1,0 +1,2 @@
+[console_scripts]
+pkt = pkt_core.cli.main:main

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Вход на портал{% endblock %}
+{% block content %}
+<section class="panel narrow entry">
+  <h1>Заявки на ПО</h1>
+  <p>Укажите имя, чтобы подать заявку и получать решения ИБ в этом браузере.</p>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% if next_url %}<input type="hidden" name="next" value="{{ next_url }}">{% endif %}
+    <p class="muted">Имя отображается в заявках. Доступ к ним сохраняется, пока действует сессия в этом браузере.</p>
+    <button type="submit">Продолжить</button>
+  </form>
+  <p class="entry-account"><a href="{% url 'login' %}{% if next_url %}?next={{ next_url|urlencode }}{% endif %}">Войти с учётной записью</a></p>
+</section>
+{% endblock %}

@@ -20,7 +20,7 @@
           {% if user.is_superuser %}<a href="{% url 'admin:scanning_antivirusprovider_changelist' %}">Антивирусы</a>{% endif %}
         </nav>
         <form class="session" method="post" action="{% url 'logout' %}">
-          {% csrf_token %}<span>{{ user.get_username }}</span><button class="secondary" type="submit">Выйти</button>
+          {% csrf_token %}<span class="account-name">{{ user.get_full_name|default:user.get_username }}</span><button class="secondary" type="submit">Выйти</button>
         </form>
       {% endif %}
     </div>

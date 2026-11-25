@@ -23,6 +23,7 @@ main { padding-block: 2rem 4rem; }
 .topbar-inner { min-height: 4.25rem; padding-block: .5rem; }
 .brand { color: var(--text); font-weight: 700; text-decoration: none; }
 .session { margin-inline-start: auto; }
+.account-name { overflow-wrap: anywhere; }
 .page-head { justify-content: space-between; margin-block: .25rem 1.15rem; }
 h1 { font-size: clamp(1.65rem, 3.5vw, 2.3rem); line-height: 1.2; margin: 0; }
 h2 { font-size: 1.2rem; margin: 0 0 .8rem; }
@@ -53,6 +54,8 @@ td { border-top: 1px solid var(--line); }
 .description { display: block; overflow-wrap: anywhere; }
 .panel { padding: 1.25rem; border: 1px solid var(--line); border-radius: .55rem; background: var(--surface); margin-block: 0 1rem; }
 .narrow { max-width: 420px; margin: 2rem auto; }
+.entry { padding: clamp(1.15rem, 4vw, 1.75rem); }
+.entry-account { border-top: 1px solid var(--line); margin: 1.35rem 0 0; padding-top: 1rem; }
 .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .columns > * { min-width: 0; }
 dt { font-weight: 600; }

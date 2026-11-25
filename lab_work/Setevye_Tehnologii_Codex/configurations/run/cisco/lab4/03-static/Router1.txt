@@ -1,0 +1,5 @@
+enable
+configure terminal
+ip route 192.168.4.0 255.255.255.224 172.16.1.1
+ip route 192.168.0.0 255.255.254.0 172.16.2.2
+end

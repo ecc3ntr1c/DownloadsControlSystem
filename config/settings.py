@@ -156,9 +156,10 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = Path(os.getenv("STATIC_ROOT") or BASE_DIR / "staticfiles")
 STATICFILES_DIRS = [BASE_DIR / "static"]
-LOGIN_URL = "login"
+DEMO_NAME_LOGIN = os.getenv("DEMO_NAME_LOGIN", "1").lower() in {"1", "true"}
+LOGIN_URL = "portal-entry" if DEMO_NAME_LOGIN else "login"
 LOGIN_REDIRECT_URL = "portal-requests"
-LOGOUT_REDIRECT_URL = "login"
+LOGOUT_REDIRECT_URL = LOGIN_URL
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

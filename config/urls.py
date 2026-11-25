@@ -23,6 +23,7 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
+from accounts.views import PortalEntryView
 from files_app.views import download_approved_file
 from notifications import views as notifications
 from requests_app import web
@@ -33,6 +34,7 @@ urlpatterns = [
     path("healthz/", health, name="health"),
     path("readyz/", readiness, name="readiness"),
     path("", web.my_requests, name="portal-requests"),
+    path("welcome/", PortalEntryView.as_view(), name="portal-entry"),
     path("login/", auth_views.LoginView.as_view(), name="login"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path("requests/new/", web.create_request, name="portal-create"),

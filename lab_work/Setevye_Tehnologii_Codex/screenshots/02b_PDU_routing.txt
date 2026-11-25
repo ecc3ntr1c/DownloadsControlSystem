@@ -1,0 +1,2 @@
+There has been no change in the accessibility tree for Window: "Cisco Packet Tracer - /Users/alexandr/PyCharmMiscProject/DownloadsControl/lab_work/Setevye_Tehnologii_Codex/packet-tracer/verified_inputs/02b_Router_on_a_stick.pkt".
+The focused UI element is 0 standard window Secondary Actions: Raise, Cisco Packet Tracer - /Users/alexandr/PyCharmMiscProject/DownloadsControl/lab_work/Setevye_Tehnologii_Codex/packet-tracer/verified_inputs/02b_Router_on_a_stick.pkt

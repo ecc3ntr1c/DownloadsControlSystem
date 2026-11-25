@@ -1,0 +1,11 @@
+Packet Tracer 8.2.1 topology and device templates
+Source: https://github.com/w4lven/claude-to-packet-tracer
+The bundled templates in generator/templates are distributed with the
+upstream MIT notice in LICENSE_templates_MIT.txt.
+
+Packet Tracer file codec and builder (installed as a dependency)
+Source: https://github.com/aacanadaa/packet-tracer-pkt-format
+PyPI: https://pypi.org/project/packet-tracer-pkt-format/0.4.1/
+The package uses GPL-3.0. The SDK itself is installed from PyPI.
+
+All generated networks use the course's own lab topology and address plan.

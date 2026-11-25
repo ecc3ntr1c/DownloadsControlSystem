@@ -1,0 +1,51 @@
+The following is a diff from the previous accessibility tree for Window: "PC5" with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+~		68 text entry area (settable) Command+F6 to exit CLI focus., Secondary Actions: Raise, Value: 
+Cisco Packet Tracer PC Command Line 1.0
+C:\>ipconfig
+
+FastEthernet0 Connection:(default port)
+
+   Connection-specific DNS Suffix..: 
+   Link-local IPv6 Address.........: FE80::290:2BFF:FE2A:E403
+   IPv6 Address....................: ::
+   IPv4 Address....................: 192.168.0.2
+   Subnet Mask.....................: 255.255.254.0
+   Default Gateway.................: ::
+                                     192.168.0.1
+
+Bluetooth Connection:
+
+   Connection-specific DNS Suffix..: 
+   Link-local IPv6 Address.........: ::
+   IPv6 Address....................: ::
+   IPv4 Address....................: 0.0.0.0
+   Subnet Mask.....................: 0.0.0.0
+   Default Gateway.................: ::
+                                     0.0.0.0
+
+C:\>, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_stackedwidget.m_DeskTopTab.scrollArea.qt_scrollarea_viewport.desktopScrollAreaWidgetContents.CDesktopApplet.CWorkstationCommandPromptBase.CCommandLine
+The focused UI element is 68 text entry area (settable) Command+F6 to exit CLI focus., Secondary Actions: Raise, Value: 
+Cisco Packet Tracer PC Command Line 1.0
+C:\>ipconfig
+
+FastEthernet0 Connection:(default port)
+
+   Connection-specific DNS Suffix..: 
+   Link-local IPv6 Address.........: FE80::290:2BFF:FE2A:E403
+   IPv6 Address....................: ::
+   IPv4 Address....................: 192.168.0.2
+   Subnet Mask.....................: 255.255.254.0
+   Default Gateway.................: ::
+                                     192.168.0.1
+
+Bluetooth Connection:
+
+   Connection-specific DNS Suffix..: 
+   Link-local IPv6 Address.........: ::
+   IPv6 Address....................: ::
+   IPv4 Address....................: 0.0.0.0
+   Subnet Mask.....................: 0.0.0.0
+   Default Gateway.................: ::
+                                     0.0.0.0
+
+C:\>, ID: PtApp.CBaseDeviceWidgetClass.mainScrollArea.qt_scrollarea_viewport.scrollAreaWidgetContents_5.c_physicalTab.qt_tabwidget_stackedwidget.m_DeskTopTab.scrollArea.qt_scrollarea_viewport.desktopScrollAreaWidgetContents.CDesktopApplet.CWorkstationCommandPromptBase.CCommandLine

@@ -1,0 +1,1167 @@
+{
+  "number": 4,
+  "lab4_variant_preserved": 4,
+  "lab1": {
+    "pcs": [
+      {
+        "pc": "PC1",
+        "switch": "Switch0",
+        "port": "Fa0/1",
+        "ip": "192.168.4.1",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.4.254"
+      },
+      {
+        "pc": "PC2",
+        "switch": "Switch0",
+        "port": "Fa0/2",
+        "ip": "192.168.4.2",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.4.254"
+      },
+      {
+        "pc": "PC3",
+        "switch": "Switch0",
+        "port": "Fa0/3",
+        "ip": "192.168.4.3",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.4.254"
+      },
+      {
+        "pc": "PC4",
+        "switch": "Switch0",
+        "port": "Fa0/4",
+        "ip": "192.168.4.4",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.4.254"
+      },
+      {
+        "pc": "PC5",
+        "switch": "Switch1",
+        "port": "Fa0/1",
+        "ip": "192.168.5.1",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.5.254"
+      },
+      {
+        "pc": "PC6",
+        "switch": "Switch1",
+        "port": "Fa0/2",
+        "ip": "192.168.5.2",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.5.254"
+      }
+    ],
+    "results": [
+      {
+        "source": "PC1",
+        "target": "PC3",
+        "ip": "192.168.4.3",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC1",
+          "Switch0",
+          "PC3"
+        ],
+        "reply": [
+          "PC3",
+          "Switch0",
+          "PC1"
+        ]
+      },
+      {
+        "source": "PC5",
+        "target": "PC6",
+        "ip": "192.168.5.2",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC5",
+          "Switch1",
+          "PC6"
+        ],
+        "reply": [
+          "PC6",
+          "Switch1",
+          "PC5"
+        ]
+      },
+      {
+        "source": "PC1",
+        "target": "PC5",
+        "ip": "192.168.5.1",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC1",
+          "Switch0",
+          "Router0",
+          "Switch1",
+          "PC5"
+        ],
+        "reply": [
+          "PC5",
+          "Switch1",
+          "Router0",
+          "Switch0",
+          "PC1"
+        ]
+      },
+      {
+        "source": "PC5",
+        "target": "PC1",
+        "ip": "192.168.4.1",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC5",
+          "Switch1",
+          "Router0",
+          "Switch0",
+          "PC1"
+        ],
+        "reply": [
+          "PC1",
+          "Switch0",
+          "Router0",
+          "Switch1",
+          "PC5"
+        ]
+      },
+      {
+        "source": "PC4",
+        "target": "PC6",
+        "ip": "192.168.5.2",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC4",
+          "Switch0",
+          "Router0",
+          "Switch1",
+          "PC6"
+        ],
+        "reply": [
+          "PC6",
+          "Switch1",
+          "Router0",
+          "Switch0",
+          "PC4"
+        ]
+      }
+    ],
+    "router": [
+      [
+        "Fa0/0",
+        "192.168.4.254",
+        "Switch0",
+        "Fa0/24"
+      ],
+      [
+        "Fa0/1",
+        "192.168.5.254",
+        "Switch1",
+        "Fa0/24"
+      ]
+    ]
+  },
+  "lab2": {
+    "pcs": [
+      {
+        "pc": "PC11",
+        "switch": "Switch0",
+        "port": "Fa0/1",
+        "vlan": 10,
+        "ip": "192.168.14.1",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.14.254"
+      },
+      {
+        "pc": "PC12",
+        "switch": "Switch0",
+        "port": "Fa0/2",
+        "vlan": 20,
+        "ip": "192.168.24.1",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.24.254"
+      },
+      {
+        "pc": "PC13",
+        "switch": "Switch0",
+        "port": "Fa0/3",
+        "vlan": 20,
+        "ip": "192.168.24.2",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.24.254"
+      },
+      {
+        "pc": "PC14",
+        "switch": "Switch0",
+        "port": "Fa0/4",
+        "vlan": 1,
+        "ip": "192.168.0.1",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.0.254"
+      },
+      {
+        "pc": "PC21",
+        "switch": "Switch1",
+        "port": "Fa0/1",
+        "vlan": 10,
+        "ip": "192.168.14.2",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.14.254"
+      },
+      {
+        "pc": "PC22",
+        "switch": "Switch1",
+        "port": "Fa0/2",
+        "vlan": 20,
+        "ip": "192.168.24.3",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.24.254"
+      },
+      {
+        "pc": "PC23",
+        "switch": "Switch1",
+        "port": "Fa0/3",
+        "vlan": 20,
+        "ip": "192.168.24.4",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.24.254"
+      },
+      {
+        "pc": "PC24",
+        "switch": "Switch1",
+        "port": "Fa0/4",
+        "vlan": 30,
+        "ip": "192.168.34.1",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.34.254"
+      },
+      {
+        "pc": "PC25",
+        "switch": "Switch1",
+        "port": "Fa0/5",
+        "vlan": 30,
+        "ip": "192.168.34.2",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.34.254"
+      },
+      {
+        "pc": "PC31",
+        "switch": "Switch2",
+        "port": "Fa0/1",
+        "vlan": 10,
+        "ip": "192.168.14.3",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.14.254"
+      },
+      {
+        "pc": "PC34",
+        "switch": "Switch2",
+        "port": "Fa0/2",
+        "vlan": 30,
+        "ip": "192.168.34.3",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.34.254"
+      },
+      {
+        "pc": "PC35",
+        "switch": "Switch2",
+        "port": "Fa0/3",
+        "vlan": 30,
+        "ip": "192.168.34.4",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.34.254"
+      },
+      {
+        "pc": "PC32",
+        "switch": "Switch2",
+        "port": "Fa0/4",
+        "vlan": 1,
+        "ip": "192.168.0.2",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.0.254"
+      }
+    ],
+    "gateway": {
+      "1": "192.168.0.254",
+      "10": "192.168.14.254",
+      "20": "192.168.24.254",
+      "30": "192.168.34.254"
+    },
+    "before": [
+      {
+        "source": "PC11",
+        "target": "PC21",
+        "ip": "192.168.14.2",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC11",
+          "Switch0",
+          "Switch1",
+          "PC21"
+        ],
+        "reply": [
+          "PC21",
+          "Switch1",
+          "Switch0",
+          "PC11"
+        ]
+      },
+      {
+        "source": "PC11",
+        "target": "PC31",
+        "ip": "192.168.14.3",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC11",
+          "Switch0",
+          "Switch1",
+          "Switch2",
+          "PC31"
+        ],
+        "reply": [
+          "PC31",
+          "Switch2",
+          "Switch1",
+          "Switch0",
+          "PC11"
+        ]
+      },
+      {
+        "source": "PC12",
+        "target": "PC22",
+        "ip": "192.168.24.3",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC12",
+          "Switch0",
+          "Switch1",
+          "PC22"
+        ],
+        "reply": [
+          "PC22",
+          "Switch1",
+          "Switch0",
+          "PC12"
+        ]
+      },
+      {
+        "source": "PC24",
+        "target": "PC34",
+        "ip": "192.168.34.3",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC24",
+          "Switch1",
+          "Switch2",
+          "PC34"
+        ],
+        "reply": [
+          "PC34",
+          "Switch2",
+          "Switch1",
+          "PC24"
+        ]
+      },
+      {
+        "source": "PC11",
+        "target": "PC12",
+        "ip": "192.168.24.1",
+        "received": 0,
+        "sent": 4,
+        "path": null,
+        "reply": null
+      },
+      {
+        "source": "PC11",
+        "target": "PC34",
+        "ip": "192.168.34.3",
+        "received": 0,
+        "sent": 4,
+        "path": null,
+        "reply": null
+      },
+      {
+        "source": "PC14",
+        "target": "PC32",
+        "ip": "192.168.0.2",
+        "received": 0,
+        "sent": 4,
+        "path": null,
+        "reply": null
+      },
+      {
+        "source": "PC14",
+        "target": "PC11",
+        "ip": "192.168.14.1",
+        "received": 0,
+        "sent": 4,
+        "path": null,
+        "reply": null
+      }
+    ],
+    "routed": [
+      {
+        "source": "PC11",
+        "target": "PC21",
+        "ip": "192.168.14.2",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC11",
+          "Switch0",
+          "Switch1",
+          "PC21"
+        ],
+        "reply": [
+          "PC21",
+          "Switch1",
+          "Switch0",
+          "PC11"
+        ]
+      },
+      {
+        "source": "PC11",
+        "target": "PC31",
+        "ip": "192.168.14.3",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC11",
+          "Switch0",
+          "Switch1",
+          "Switch2",
+          "PC31"
+        ],
+        "reply": [
+          "PC31",
+          "Switch2",
+          "Switch1",
+          "Switch0",
+          "PC11"
+        ]
+      },
+      {
+        "source": "PC12",
+        "target": "PC22",
+        "ip": "192.168.24.3",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC12",
+          "Switch0",
+          "Switch1",
+          "PC22"
+        ],
+        "reply": [
+          "PC22",
+          "Switch1",
+          "Switch0",
+          "PC12"
+        ]
+      },
+      {
+        "source": "PC24",
+        "target": "PC34",
+        "ip": "192.168.34.3",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC24",
+          "Switch1",
+          "Switch2",
+          "PC34"
+        ],
+        "reply": [
+          "PC34",
+          "Switch2",
+          "Switch1",
+          "PC24"
+        ]
+      },
+      {
+        "source": "PC11",
+        "target": "PC12",
+        "ip": "192.168.24.1",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC11",
+          "Switch0",
+          "Switch1",
+          "Switch2",
+          "Router0",
+          "Switch2",
+          "Switch1",
+          "Switch0",
+          "PC12"
+        ],
+        "reply": [
+          "PC12",
+          "Switch0",
+          "Switch1",
+          "Switch2",
+          "Router0",
+          "Switch2",
+          "Switch1",
+          "Switch0",
+          "PC11"
+        ]
+      },
+      {
+        "source": "PC11",
+        "target": "PC34",
+        "ip": "192.168.34.3",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC11",
+          "Switch0",
+          "Switch1",
+          "Switch2",
+          "Router0",
+          "Switch2",
+          "PC34"
+        ],
+        "reply": [
+          "PC34",
+          "Switch2",
+          "Router0",
+          "Switch2",
+          "Switch1",
+          "Switch0",
+          "PC11"
+        ]
+      },
+      {
+        "source": "PC14",
+        "target": "PC32",
+        "ip": "192.168.0.2",
+        "received": 0,
+        "sent": 4,
+        "path": null,
+        "reply": null
+      },
+      {
+        "source": "PC14",
+        "target": "PC11",
+        "ip": "192.168.14.1",
+        "received": 0,
+        "sent": 4,
+        "path": null,
+        "reply": null
+      }
+    ],
+    "complete": [
+      {
+        "source": "PC11",
+        "target": "PC21",
+        "ip": "192.168.14.2",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC11",
+          "Switch0",
+          "Switch1",
+          "PC21"
+        ],
+        "reply": [
+          "PC21",
+          "Switch1",
+          "Switch0",
+          "PC11"
+        ]
+      },
+      {
+        "source": "PC11",
+        "target": "PC31",
+        "ip": "192.168.14.3",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC11",
+          "Switch0",
+          "Switch1",
+          "Switch2",
+          "PC31"
+        ],
+        "reply": [
+          "PC31",
+          "Switch2",
+          "Switch1",
+          "Switch0",
+          "PC11"
+        ]
+      },
+      {
+        "source": "PC12",
+        "target": "PC22",
+        "ip": "192.168.24.3",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC12",
+          "Switch0",
+          "Switch1",
+          "PC22"
+        ],
+        "reply": [
+          "PC22",
+          "Switch1",
+          "Switch0",
+          "PC12"
+        ]
+      },
+      {
+        "source": "PC24",
+        "target": "PC34",
+        "ip": "192.168.34.3",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC24",
+          "Switch1",
+          "Switch2",
+          "PC34"
+        ],
+        "reply": [
+          "PC34",
+          "Switch2",
+          "Switch1",
+          "PC24"
+        ]
+      },
+      {
+        "source": "PC11",
+        "target": "PC12",
+        "ip": "192.168.24.1",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC11",
+          "Switch0",
+          "Switch1",
+          "Switch2",
+          "Router0",
+          "Switch2",
+          "Switch1",
+          "Switch0",
+          "PC12"
+        ],
+        "reply": [
+          "PC12",
+          "Switch0",
+          "Switch1",
+          "Switch2",
+          "Router0",
+          "Switch2",
+          "Switch1",
+          "Switch0",
+          "PC11"
+        ]
+      },
+      {
+        "source": "PC11",
+        "target": "PC34",
+        "ip": "192.168.34.3",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC11",
+          "Switch0",
+          "Switch1",
+          "Switch2",
+          "Router0",
+          "Switch2",
+          "PC34"
+        ],
+        "reply": [
+          "PC34",
+          "Switch2",
+          "Router0",
+          "Switch2",
+          "Switch1",
+          "Switch0",
+          "PC11"
+        ]
+      },
+      {
+        "source": "PC14",
+        "target": "PC32",
+        "ip": "192.168.0.2",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC14",
+          "Switch0",
+          "Switch1",
+          "Switch2",
+          "PC32"
+        ],
+        "reply": [
+          "PC32",
+          "Switch2",
+          "Switch1",
+          "Switch0",
+          "PC14"
+        ]
+      },
+      {
+        "source": "PC14",
+        "target": "PC11",
+        "ip": "192.168.14.1",
+        "received": 4,
+        "sent": 4,
+        "path": [
+          "PC14",
+          "Switch0",
+          "Switch1",
+          "Switch2",
+          "Router0",
+          "Switch2",
+          "Switch1",
+          "Switch0",
+          "PC11"
+        ],
+        "reply": [
+          "PC11",
+          "Switch0",
+          "Switch1",
+          "Switch2",
+          "Router0",
+          "Switch2",
+          "Switch1",
+          "Switch0",
+          "PC14"
+        ]
+      }
+    ],
+    "all_pairs": 156
+  },
+  "lab3": {
+    "pcs": [
+      {
+        "pc": "PC0",
+        "switch": "Switch0",
+        "port": "Fa0/1",
+        "vlan": 1,
+        "ip": "192.168.4.1",
+        "mask": "255.255.255.0",
+        "gateway": null
+      },
+      {
+        "pc": "PC1",
+        "switch": "Switch1",
+        "port": "Fa0/1",
+        "vlan": 1,
+        "ip": "192.168.4.2",
+        "mask": "255.255.255.0",
+        "gateway": null
+      },
+      {
+        "pc": "PC2",
+        "switch": "Switch2",
+        "port": "Fa0/1",
+        "vlan": 1,
+        "ip": "192.168.4.3",
+        "mask": "255.255.255.0",
+        "gateway": null
+      }
+    ],
+    "root_before": "Switch0",
+    "root_after": "Switch2",
+    "priority_before": 32769,
+    "priority_after": 24577,
+    "macs": {
+      "Switch0": [
+        32769,
+        "02:00:00:00:00:00"
+      ],
+      "Switch1": [
+        32769,
+        "02:00:00:00:00:01"
+      ],
+      "Switch2": [
+        24577,
+        "02:00:00:00:00:02"
+      ]
+    },
+    "roles_initial": [
+      [
+        "Switch0",
+        "Fa0/1",
+        "Desg FWD (ПК)"
+      ],
+      [
+        "Switch0",
+        "Fa0/2",
+        "Desg FWD"
+      ],
+      [
+        "Switch0",
+        "Fa0/4",
+        "Desg FWD"
+      ],
+      [
+        "Switch1",
+        "Fa0/1",
+        "Desg FWD (ПК)"
+      ],
+      [
+        "Switch1",
+        "Fa0/4",
+        "Root FWD"
+      ],
+      [
+        "Switch1",
+        "Fa0/5",
+        "Desg FWD"
+      ],
+      [
+        "Switch2",
+        "Fa0/1",
+        "Desg FWD (ПК)"
+      ],
+      [
+        "Switch2",
+        "Fa0/2",
+        "Root FWD"
+      ],
+      [
+        "Switch2",
+        "Fa0/5",
+        "Altn BLK"
+      ]
+    ],
+    "roles_primary": [
+      [
+        "Switch0",
+        "Fa0/1",
+        "Desg FWD (ПК)"
+      ],
+      [
+        "Switch0",
+        "Fa0/2",
+        "Root FWD"
+      ],
+      [
+        "Switch0",
+        "Fa0/4",
+        "Desg FWD"
+      ],
+      [
+        "Switch1",
+        "Fa0/1",
+        "Desg FWD (ПК)"
+      ],
+      [
+        "Switch1",
+        "Fa0/4",
+        "Altn BLK"
+      ],
+      [
+        "Switch1",
+        "Fa0/5",
+        "Root FWD"
+      ],
+      [
+        "Switch2",
+        "Fa0/1",
+        "Desg FWD (ПК)"
+      ],
+      [
+        "Switch2",
+        "Fa0/2",
+        "Desg FWD"
+      ],
+      [
+        "Switch2",
+        "Fa0/5",
+        "Desg FWD"
+      ]
+    ],
+    "roles_parallel": [
+      [
+        "Switch0",
+        "Fa0/1",
+        "Desg FWD (ПК)"
+      ],
+      [
+        "Switch0",
+        "Fa0/2",
+        "Root FWD"
+      ],
+      [
+        "Switch0",
+        "Fa0/3",
+        "Altn BLK"
+      ],
+      [
+        "Switch0",
+        "Fa0/4",
+        "Desg FWD"
+      ],
+      [
+        "Switch1",
+        "Fa0/1",
+        "Desg FWD (ПК)"
+      ],
+      [
+        "Switch1",
+        "Fa0/4",
+        "Altn BLK"
+      ],
+      [
+        "Switch1",
+        "Fa0/5",
+        "Root FWD"
+      ],
+      [
+        "Switch2",
+        "Fa0/1",
+        "Desg FWD (ПК)"
+      ],
+      [
+        "Switch2",
+        "Fa0/2",
+        "Desg FWD"
+      ],
+      [
+        "Switch2",
+        "Fa0/3",
+        "Desg FWD"
+      ],
+      [
+        "Switch2",
+        "Fa0/5",
+        "Desg FWD"
+      ]
+    ],
+    "roles_bundle": [
+      [
+        "Switch0",
+        "Fa0/1",
+        "Desg FWD (ПК)"
+      ],
+      [
+        "Switch0",
+        "Fa0/4",
+        "Desg FWD"
+      ],
+      [
+        "Switch0",
+        "Po1",
+        "Root FWD"
+      ],
+      [
+        "Switch1",
+        "Fa0/1",
+        "Desg FWD (ПК)"
+      ],
+      [
+        "Switch1",
+        "Fa0/4",
+        "Altn BLK"
+      ],
+      [
+        "Switch1",
+        "Fa0/5",
+        "Root FWD"
+      ],
+      [
+        "Switch2",
+        "Fa0/1",
+        "Desg FWD (ПК)"
+      ],
+      [
+        "Switch2",
+        "Fa0/5",
+        "Desg FWD"
+      ],
+      [
+        "Switch2",
+        "Po1",
+        "Desg FWD"
+      ]
+    ],
+    "roles_survivor": [
+      [
+        "Switch0",
+        "Fa0/1",
+        "Desg FWD (ПК)"
+      ],
+      [
+        "Switch0",
+        "Fa0/4",
+        "Desg FWD"
+      ],
+      [
+        "Switch0",
+        "Po1",
+        "Root FWD"
+      ],
+      [
+        "Switch1",
+        "Fa0/1",
+        "Desg FWD (ПК)"
+      ],
+      [
+        "Switch1",
+        "Fa0/4",
+        "Altn BLK"
+      ],
+      [
+        "Switch1",
+        "Fa0/5",
+        "Root FWD"
+      ],
+      [
+        "Switch2",
+        "Fa0/1",
+        "Desg FWD (ПК)"
+      ],
+      [
+        "Switch2",
+        "Fa0/5",
+        "Desg FWD"
+      ],
+      [
+        "Switch2",
+        "Po1",
+        "Desg FWD"
+      ]
+    ],
+    "ping_ok": {
+      "source": "PC0",
+      "target": "PC2",
+      "ip": "192.168.4.3",
+      "received": 4,
+      "sent": 4,
+      "path": [
+        "PC0",
+        "Switch0",
+        "Switch2",
+        "PC2"
+      ],
+      "reply": [
+        "PC2",
+        "Switch2",
+        "Switch0",
+        "PC0"
+      ]
+    },
+    "ping_survivor": {
+      "source": "PC0",
+      "target": "PC2",
+      "ip": "192.168.4.3",
+      "received": 4,
+      "sent": 4,
+      "path": [
+        "PC0",
+        "Switch0",
+        "Switch2",
+        "PC2"
+      ],
+      "reply": [
+        "PC2",
+        "Switch2",
+        "Switch0",
+        "PC0"
+      ]
+    },
+    "tree_flood": [
+      {
+        "round": 1,
+        "forwarded": 1,
+        "switches": [
+          "Switch0 ×1"
+        ]
+      },
+      {
+        "round": 2,
+        "forwarded": 1,
+        "switches": [
+          "Switch2 ×1"
+        ]
+      },
+      {
+        "round": 3,
+        "forwarded": 0,
+        "switches": [
+          "Switch1 ×1"
+        ]
+      }
+    ],
+    "storm": [
+      {
+        "round": 1,
+        "forwarded": 2,
+        "switches": [
+          "Switch0 ×1"
+        ]
+      },
+      {
+        "round": 2,
+        "forwarded": 2,
+        "switches": [
+          "Switch1 ×1",
+          "Switch2 ×1"
+        ]
+      },
+      {
+        "round": 3,
+        "forwarded": 2,
+        "switches": [
+          "Switch1 ×1",
+          "Switch2 ×1"
+        ]
+      },
+      {
+        "round": 4,
+        "forwarded": 2,
+        "switches": [
+          "Switch0 ×2"
+        ]
+      },
+      {
+        "round": 5,
+        "forwarded": 2,
+        "switches": [
+          "Switch1 ×1",
+          "Switch2 ×1"
+        ]
+      },
+      {
+        "round": 6,
+        "forwarded": 2,
+        "switches": [
+          "Switch1 ×1",
+          "Switch2 ×1"
+        ]
+      },
+      {
+        "round": 7,
+        "forwarded": 2,
+        "switches": [
+          "Switch0 ×2"
+        ]
+      },
+      {
+        "round": 8,
+        "forwarded": 2,
+        "switches": [
+          "Switch1 ×1",
+          "Switch2 ×1"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+enable
+configure terminal
+hostname Router2
+interface FastEthernet7/0
+ ip address 192.168.0.1 255.255.254.0
+ no shutdown
+exit
+interface Gi9/0
+ ip address 172.16.2.2 255.255.255.0
+ no shutdown
+exit
+interface Gi8/0
+ ip address 172.16.3.2 255.255.255.0
+ no shutdown
+exit
+end
